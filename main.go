@@ -8,12 +8,24 @@ import "C"
 import (
 	"bufio"
 	"encoding/csv"
+	"flag"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
+
+type arrayFlags []string
+
+func (i *arrayFlags) String() string {
+	return strings.Join((*i)[:], ",")
+}
+
+func (i *arrayFlags) Set(value string) error {
+	*i = append(*i, value)
+	return nil
+}
 
 func readCSV() {
 	file, err := os.Open("data/madrid_emt/stops.txt")
@@ -43,7 +55,7 @@ func readCSV() {
 }
 
 func initDB(gtfs []string) {
-	_ = os.Remove("data/gtfs_SQL_importer/trippy.db")
+	//_ = os.Remove("data/trippy.db")
 	initCmd := exec.Command("sqlite3", "-init", "data/gtfs_SQL_importer/gtfs_tables.sqlite", "data/trippy.db")
 	initIn, _ := initCmd.StdinPipe()
 
@@ -74,20 +86,28 @@ func initDB(gtfs []string) {
 }
 
 func main() {
+	var gtfsFlags arrayFlags
+	flag.Var(&gtfsFlags, "gtfs", "path to GTFS")
+	flag.Parse()
+
 	fmt.Println("Hi from Go, about to calculate distance in C++ ...")
 	distance := C.distance_between(1.0, 1.0, 2.0, 2.0)
 	fmt.Printf("Go has result, distance is: %v\n", distance)
 
-	initDB([]string{"data/madrid_emt", "data/madrid_bus"})
-
-	router := gin.Default()
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
-	if err := router.Run(); err != nil {
-		// pretend I'm handling it...
+	if len(gtfsFlags) > 0 {
+		initDB(gtfsFlags)
 	}
+
+	/*
+		router := gin.Default()
+		router.GET("/ping", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"message": "pong",
+			})
+		})
+
+		if err := router.Run(); err != nil {
+			// pretend I'm handling it...
+		}
+	*/
 }
