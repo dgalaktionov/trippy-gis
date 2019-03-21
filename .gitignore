@@ -37,4 +37,7 @@
 
 # trippy-gis
 trippy-gis
+data/*
+.idea/dataSources/**
 !ctr/*
+!data/gtfs_SQL_importer
