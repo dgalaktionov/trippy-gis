@@ -10,11 +10,44 @@ import (
 	"encoding/csv"
 	"flag"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/paulmach/go.geojson"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
 )
+
+func logAndQuit(err error) bool {
+	if err != nil {
+		log.Fatalln(err)
+		return false
+	} else {
+		return true
+	}
+}
+
+func logAndPanic(err error) bool {
+	if err != nil {
+		log.Panicln(err)
+		return false
+	} else {
+		return true
+	}
+}
+
+// A modern language with no function overloading O_o
+func logAndPanic2(err error, c *gin.Context) bool {
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "shit's on fire yo",
+		})
+		log.Panicln(err)
+		return false
+	} else {
+		return true
+	}
+}
 
 type arrayFlags []string
 
@@ -29,17 +62,11 @@ func (i *arrayFlags) Set(value string) error {
 
 func readCSV() {
 	file, err := os.Open("data/madrid_emt/stops.txt")
-	if err != nil {
-		log.Fatalln(err)
-	}
-
+	logAndQuit(err)
 	defer file.Close()
 	csvReader := csv.NewReader(bufio.NewReader(file))
 	records, err := csvReader.ReadAll()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
+	logAndQuit(err)
 	header := make(map[string]int, len(records[0]))
 
 	for i, h := range records[0] {
@@ -57,32 +84,26 @@ func readCSV() {
 func initDB(gtfs []string) {
 	//_ = os.Remove("data/trippy.db")
 	initCmd := exec.Command("sqlite3", "-init", "data/gtfs_SQL_importer/gtfs_tables.sqlite", "data/trippy.db")
+	defer initCmd.Wait()
 	initIn, _ := initCmd.StdinPipe()
-
-	if err := initCmd.Start(); err != nil {
-		log.Fatalln(err)
-	}
+	defer initIn.Close()
+	err := initCmd.Start()
+	logAndQuit(err)
 
 	for _, f := range gtfs {
 		// Now we want to call a lib written in a real language
 		insertCmd := exec.Command("python", "data/gtfs_SQL_importer/import_gtfs_to_sql.py", f, "nocopy")
 		out, err := insertCmd.Output()
-
-		if err != nil {
-			log.Fatalln(err)
-		}
-
+		logAndQuit(err)
 		_ = insertCmd.Wait()
-
-		if _, err := initIn.Write(out); err != nil {
-			log.Fatalln(err)
-		}
-
+		_, err = initIn.Write(out)
+		logAndQuit(err)
 		_, _ = initIn.Write([]byte("\n"))
 	}
+}
 
-	_ = initIn.Close()
-	_ = initCmd.Wait()
+func returnGeoJSON(c *gin.Context, gjson []byte) {
+	c.Data(200, "application/json; charset=utf-8", gjson)
 }
 
 func main() {
@@ -98,16 +119,15 @@ func main() {
 		initDB(gtfsFlags)
 	}
 
-	/*
-		router := gin.Default()
-		router.GET("/ping", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "pong",
-			})
-		})
+	router := gin.Default()
+	router.GET("/ping", func(c *gin.Context) {
+		fc := geojson.NewFeatureCollection()
+		fc.AddFeature(geojson.NewPointFeature([]float64{1, 2}))
+		rawJSON, err := fc.MarshalJSON()
+		logAndPanic2(err, c)
+		returnGeoJSON(c, rawJSON)
+	})
 
-		if err := router.Run(); err != nil {
-			// pretend I'm handling it...
-		}
-	*/
+	err := router.Run()
+	logAndQuit(err)
 }
