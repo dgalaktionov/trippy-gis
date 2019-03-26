@@ -32,9 +32,12 @@ func main() {
 	defer db.Close()
 	readStops(db)
 	router := gin.Default()
+	router.LoadHTMLGlob("view/*")
 	router.GET("/ping", Ping)
 	router.GET("/stops", GetAllStops)
 	router.GET("/stop/:id", GetStop)
+	router.GET("/index", ShowIndex)
+	router.GET("/", ShowIndex)
 	err := router.Run()
 	LogAndQuit(err)
 }

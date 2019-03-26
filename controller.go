@@ -42,3 +42,7 @@ func GetStop(c *gin.Context) {
 	id := c.Param("id")
 	returnGeoJSONFeature(c, stops[id].ToGeoJSON())
 }
+
+func ShowIndex(c *gin.Context) {
+	c.HTML(200, "index.html", gin.H{})
+}
