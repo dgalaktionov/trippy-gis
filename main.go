@@ -11,6 +11,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/paulmach/go.geojson"
 	"log"
 	"os"
@@ -102,6 +104,15 @@ func initDB(gtfs []string) {
 	}
 }
 
+type Stop struct {
+	Id   string  `db:"stop_id"`
+	Name string  `db:"stop_name"`
+	Lat  float64 `db:"stop_lat"`
+	Lon  float64 `db:"stop_lon"`
+}
+
+//var stops = map[string]Stop{}
+
 func returnGeoJSON(c *gin.Context, gjson []byte) {
 	c.Data(200, "application/json; charset=utf-8", gjson)
 }
@@ -119,6 +130,15 @@ func main() {
 		initDB(gtfsFlags)
 	}
 
+	db, err := sqlx.Connect("sqlite3", "file:data/trippy.db?cache=shared&mode=ro")
+	defer db.Close()
+	logAndQuit(err)
+
+	stops := []Stop{}
+	err = db.Select(&stops, "SELECT stop_id, stop_name, stop_lat, stop_lon FROM gtfs_stops ORDER BY stop_id")
+	logAndQuit(err)
+	fmt.Println(stops)
+
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 		fc := geojson.NewFeatureCollection()
@@ -128,6 +148,6 @@ func main() {
 		returnGeoJSON(c, rawJSON)
 	})
 
-	err := router.Run()
+	err = router.Run()
 	logAndQuit(err)
 }
