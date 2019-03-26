@@ -34,6 +34,7 @@ func main() {
 	router := gin.Default()
 	router.GET("/ping", Ping)
 	router.GET("/stops", GetAllStops)
+	router.GET("/stop/:id", GetStop)
 	err := router.Run()
 	LogAndQuit(err)
 }
