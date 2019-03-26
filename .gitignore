@@ -41,3 +41,6 @@ data/*
 .idea/dataSources/**
 !ctr/*
 !data/gtfs_SQL_importer
+.idea/dataSources.local.xml
+/view/js/node_modules/
+/view/bundle.js
