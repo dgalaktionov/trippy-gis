@@ -111,10 +111,23 @@ type Stop struct {
 	Lon  float64 `db:"stop_lon"`
 }
 
-//var stops = map[string]Stop{}
+var stops = map[string]Stop{}
 
-func returnGeoJSON(c *gin.Context, gjson []byte) {
-	c.Data(200, "application/json; charset=utf-8", gjson)
+type geometry interface {
+	ToGeoJSON() *geojson.Feature
+}
+
+func (s Stop) ToGeoJSON() *geojson.Feature {
+	f := geojson.NewPointFeature([]float64{s.Lat, s.Lon})
+	f.Properties["id"] = s.Id
+	f.Properties["name"] = s.Name
+	return f
+}
+
+func returnGeoJSON(c *gin.Context, fc *geojson.FeatureCollection) {
+	rawJSON, err := fc.MarshalJSON()
+	logAndPanic2(err, c)
+	c.Data(200, "application/json; charset=utf-8", rawJSON)
 }
 
 func main() {
@@ -134,18 +147,29 @@ func main() {
 	defer db.Close()
 	logAndQuit(err)
 
-	stops := []Stop{}
-	err = db.Select(&stops, "SELECT stop_id, stop_name, stop_lat, stop_lon FROM gtfs_stops ORDER BY stop_id")
+	stopSlice := []Stop{}
+	err = db.Select(&stopSlice, "SELECT stop_id, stop_name, stop_lat, stop_lon FROM gtfs_stops ORDER BY stop_id")
 	logAndQuit(err)
-	fmt.Println(stops)
+
+	for _, s := range stopSlice {
+		stops[s.Id] = s
+	}
 
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+
+	router.GET("/stops", func(c *gin.Context) {
 		fc := geojson.NewFeatureCollection()
-		fc.AddFeature(geojson.NewPointFeature([]float64{1, 2}))
-		rawJSON, err := fc.MarshalJSON()
-		logAndPanic2(err, c)
-		returnGeoJSON(c, rawJSON)
+
+		for _, s := range stops {
+			fc.AddFeature(s.ToGeoJSON())
+		}
+
+		returnGeoJSON(c, fc)
 	})
 
 	err = router.Run()
