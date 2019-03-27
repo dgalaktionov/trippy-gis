@@ -1,0 +1,10 @@
+@import url("node_modules/leaflet/dist/leaflet.css");
+
+html,body {
+    background-color: #000;
+    height: 100%;
+}
+
+#map {
+    height: 100%;
+}

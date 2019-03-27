@@ -35,6 +35,7 @@ func main() {
 	router.LoadHTMLGlob("view/*.html")
 	router.StaticFile("/bundle.js", "view/bundle.js")
 	router.StaticFile("/bundle.min.js", "view/bundle.min.js")
+	router.Static("/images", "view/images")
 	router.GET("/ping", Ping)
 	router.GET("/stops", GetAllStops)
 	router.GET("/stop/:id", GetStop)

@@ -1,0 +1,15 @@
+{
+  "name": "trippy-gis",
+  "version": "0.1.0",
+  "main": "bundle.js",
+  "dependencies": {
+    "leaflet": "^1.4.0"
+  },
+  "scripts": {
+    "build": "browserify -t [ browserify-css --rebaseUrls=0 ] index.js > ../bundle.js"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "browserify-css": "^0.14.0"
+  }
+}
