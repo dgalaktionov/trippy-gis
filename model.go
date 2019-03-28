@@ -14,7 +14,7 @@ type Geometry interface {
 }
 
 func (s Stop) ToGeoJSON() *geojson.Feature {
-	f := geojson.NewPointFeature([]float64{s.Lat, s.Lon})
+	f := geojson.NewPointFeature([]float64{s.Lon, s.Lat})
 	f.Properties["id"] = s.Id
 	f.Properties["name"] = s.Name
 	return f

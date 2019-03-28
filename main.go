@@ -38,7 +38,7 @@ func main() {
 	router.Static("/images", "view/images")
 	router.GET("/ping", Ping)
 	router.GET("/stops", GetAllStops)
-	router.GET("/stop/:id", GetStop)
+	router.GET("/stops/:id", GetStop)
 	router.GET("/index", ShowIndex)
 	router.GET("/", ShowIndex)
 	err := router.Run()
