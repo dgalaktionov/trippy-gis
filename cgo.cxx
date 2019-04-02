@@ -55,6 +55,10 @@ void * loadCTR(char *filename, char *linesFile, char *timesFile, char *commons) 
     return index;
 }
 
+void freeCTR(void * ctr) {
+    free_index(ctr);
+}
+
 uint64_t start(void * ctr, uint32_t s) {
     TimeQuery q;
     uint values[2] = {1, s};

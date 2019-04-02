@@ -24,6 +24,7 @@ func main() {
 	readStops(db)
 	ReadStopId()
 	LoadCTR()
+	defer FreeCTR()
 	router := gin.Default()
 	router.LoadHTMLGlob("view/*.html")
 	router.StaticFile("/bundle.js", "view/bundle.js")

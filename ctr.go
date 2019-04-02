@@ -29,6 +29,11 @@ func LoadCTR() unsafe.Pointer {
 	return ctr
 }
 
+func FreeCTR() {
+	C.freeCTR(ctr)
+	ctr = nil
+}
+
 func CTRStart(s uint32) uint64 {
 	return uint64(C.start(ctr, C.uint(s)))
 }

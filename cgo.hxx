@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 void * loadCTR(char *filename, char *linesFile, char *timesFile, char *commons);
-
+void freeCTR(void *ctr);
 uint64_t start(void *ctr, uint32_t s);
 
 #ifdef __cplusplus
