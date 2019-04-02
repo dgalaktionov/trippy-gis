@@ -44,3 +44,4 @@ data/*
 .idea/dataSources.local.xml
 /view/src/node_modules/
 /view/bundle.js
+!/data/stops.txt
