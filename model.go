@@ -1,6 +1,8 @@
 package main
 
-import "github.com/paulmach/go.geojson"
+import (
+	"github.com/paulmach/go.geojson"
+)
 
 type Stop struct {
 	Id   string  `db:"stop_id"`
@@ -15,7 +17,13 @@ type Geometry interface {
 
 func (s Stop) ToGeoJSON() *geojson.Feature {
 	f := geojson.NewPointFeature([]float64{s.Lon, s.Lat})
-	f.Properties["id"] = s.Id
+
+	if id, ok := stop_id_to_ctr[s.Id]; ok {
+		f.Properties["id"] = id
+	} else {
+		return nil
+	}
+
 	f.Properties["name"] = s.Name
 	return f
 }

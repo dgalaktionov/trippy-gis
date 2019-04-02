@@ -28,3 +28,7 @@ QueryType queryTypes[16] = {
 double distance_between(double x1, double y1, double x2, double y2) {
   return 24.0f;
 }
+
+uint64_t start(uint32_t s) {
+    return 24;
+}

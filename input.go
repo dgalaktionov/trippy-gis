@@ -29,6 +29,19 @@ func ReadCSV() {
 	}
 }
 
+func ReadStopId() {
+	file, err := os.Open("data/stops.txt")
+	LogAndQuit(err)
+	defer file.Close()
+	lineScanner := bufio.NewScanner(file)
+	var i uint32 = 1
+
+	for lineScanner.Scan() {
+		stop_id_to_ctr[lineScanner.Text()] = i
+		i += 1
+	}
+}
+
 func InitDB(gtfs []string) {
 	//_ = os.Remove("data/trippy.db")
 	initCmd := exec.Command("sqlite3", "-init", "data/gtfs_SQL_importer/gtfs_tables.sqlite", "data/trippy.db")

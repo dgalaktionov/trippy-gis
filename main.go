@@ -1,28 +1,19 @@
 package main
 
-// #cgo CXXFLAGS: -Ictr/libcds/includes/
-// #cgo LDFLAGS: -Lctr -lwcsa -lsais -lcds -lrt -lzstd
-// #include "cgo.hxx"
-import "C"
-
 import (
 	"flag"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 var stops = map[string]Stop{}
+var stop_id_to_ctr = map[string]uint32{}
 
 func main() {
 	var gtfsFlags ArrayFlags
 	flag.Var(&gtfsFlags, "gtfs", "path to GTFS")
 	flag.Parse()
-
-	fmt.Println("Hi from Go, about to calculate distance in C++ ...")
-	distance := C.distance_between(1.0, 1.0, 2.0, 2.0)
-	fmt.Printf("Go has result, distance is: %v\n", distance)
 
 	if len(gtfsFlags) > 0 {
 		InitDB(gtfsFlags)
@@ -31,6 +22,7 @@ func main() {
 	db := connectDB()
 	defer db.Close()
 	readStops(db)
+	ReadStopId()
 	router := gin.Default()
 	router.LoadHTMLGlob("view/*.html")
 	router.StaticFile("/bundle.js", "view/bundle.js")
@@ -41,6 +33,7 @@ func main() {
 	router.GET("/stops/:id", GetStop)
 	router.GET("/index", ShowIndex)
 	router.GET("/", ShowIndex)
+	router.GET("/start/:id", GetStart)
 	err := router.Run()
 	LogAndQuit(err)
 }

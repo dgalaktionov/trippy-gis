@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/paulmach/go.geojson"
+	"strconv"
 )
 
 func returnGeoJSON(c *gin.Context, data []byte) {
@@ -32,7 +33,9 @@ func GetAllStops(c *gin.Context) {
 	fc := geojson.NewFeatureCollection()
 
 	for _, s := range stops {
-		fc.AddFeature(s.ToGeoJSON())
+		if f := s.ToGeoJSON(); f != nil {
+			fc.AddFeature(f)
+		}
 	}
 
 	returnGeoJSONFeatureCollection(c, fc)
@@ -45,4 +48,12 @@ func GetStop(c *gin.Context) {
 
 func ShowIndex(c *gin.Context) {
 	c.HTML(200, "index.html", gin.H{})
+}
+
+func GetStart(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	LogAndPanic2(err, c)
+	c.JSON(200, gin.H{
+		"count": CTRStart(uint32(id)),
+	})
 }
