@@ -7,8 +7,9 @@
 extern "C" {
 #endif
 
-double distance_between(double x1, double y1, double x2, double y2);
-uint64_t start(uint32_t s);
+void * loadCTR(char *filename, char *linesFile, char *timesFile, char *commons);
+
+uint64_t start(void *ctr, uint32_t s);
 
 #ifdef __cplusplus
 }

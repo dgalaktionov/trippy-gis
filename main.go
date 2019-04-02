@@ -23,6 +23,7 @@ func main() {
 	defer db.Close()
 	readStops(db)
 	ReadStopId()
+	LoadCTR()
 	router := gin.Default()
 	router.LoadHTMLGlob("view/*.html")
 	router.StaticFile("/bundle.js", "view/bundle.js")
