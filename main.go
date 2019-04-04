@@ -26,6 +26,7 @@ func main() {
 	LoadCTR()
 	defer FreeCTR()
 	router := gin.Default()
+	router.Delims("{%", "%}")
 	router.LoadHTMLGlob("view/*.html")
 	router.StaticFile("/bundle.js", "view/bundle.js")
 	router.StaticFile("/bundle.min.js", "view/bundle.min.js")

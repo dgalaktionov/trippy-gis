@@ -2,7 +2,7 @@
 @import url("node_modules/leaflet-toolbar/dist/leaflet.toolbar.css");
 
 html,body {
-    background-color: #000;
+    /*background-color: #000;*/
     height: 100%;
     margin: 0;
 }
@@ -27,4 +27,9 @@ html,body {
 
 .stopPopupList {
     margin-top: 0;
+}
+
+.stopPopup {
+    min-width: 200px;
+    max-width: 200px;
 }
