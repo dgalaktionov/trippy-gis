@@ -1,7 +1,10 @@
 <template>
     <div class="stopPopup" v-show="stop.properties.name">
         <div class="stopPopupTitle">{{stop.properties.name}}</div>
-        <div class="stopPopupCounter">Start: {{start}}</div>
+        <div class="stopPopupCounter">Board: {{stats.board}}</div>
+        <div class="stopPopupCounter">Switch: {{stats.switch}}</div>
+        <div class="stopPopupCounter">Start: {{stats.start}}</div>
+        <div class="stopPopupCounter">End: {{stats.end}}</div>
     </div>
 </template>
 
@@ -17,10 +20,10 @@
         },
         asyncComputed: {
             // TODO show a spinner by default or something
-          start: {
+          stats: {
               get () {
                   this.start = 0;
-                  return getty.jsonGet("/start/" + this.stop.properties.id).then((r) => r.count);
+                  return getty.jsonGet("/stop_stats/" + this.stop.properties.id);
               },
 
               default() {

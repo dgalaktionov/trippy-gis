@@ -23,8 +23,8 @@ func main() {
 	defer db.Close()
 	readStops(db)
 	ReadStopId()
-	LoadCTR()
-	defer FreeCTR()
+	CTRLoad()
+	defer CTRFree()
 	router := gin.Default()
 	router.Delims("{%", "%}")
 	router.LoadHTMLGlob("view/*.html")
@@ -37,6 +37,7 @@ func main() {
 	router.GET("/index", ShowIndex)
 	router.GET("/", ShowIndex)
 	router.GET("/start/:id", GetStart)
+	router.GET("/stop_stats/:id", GetStopStats)
 	err := router.Run()
 	LogAndQuit(err)
 }

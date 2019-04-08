@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/paulmach/go.geojson"
+	"log"
 	"strconv"
 )
 
@@ -42,8 +43,16 @@ func GetAllStops(c *gin.Context) {
 }
 
 func GetStop(c *gin.Context) {
-	id := c.Param("id")
-	returnGeoJSONFeature(c, stops[id].ToGeoJSON())
+	idStr := c.Param("id")
+	s := stops[idStr].ToGeoJSON()
+
+	if s == nil {
+		c.JSON(404, gin.H{
+			"message": "Stop not found",
+		})
+	} else {
+		returnGeoJSONFeature(c, s)
+	}
 }
 
 func ShowIndex(c *gin.Context) {
@@ -55,5 +64,24 @@ func GetStart(c *gin.Context) {
 	LogAndPanic2(err, c)
 	c.JSON(200, gin.H{
 		"count": CTRStart(uint32(id)),
+	})
+}
+
+func GetStopStats(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	LogAndPanic2(err, c)
+
+	sId := uint32(id)
+	startCTR := CTRStart(sId)
+	endCTR := CTREnd(sId)
+	boardCTR := CTRBoard(sId)
+
+	log.Printf("%d %d %d\n", boardCTR, startCTR, endCTR)
+
+	c.JSON(200, gin.H{
+		"start":  startCTR,
+		"end":    endCTR,
+		"switch": boardCTR - startCTR,
+		"board":  boardCTR,
 	})
 }

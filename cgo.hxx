@@ -7,9 +7,12 @@
 extern "C" {
 #endif
 
-void * loadCTR(char *filename, char *linesFile, char *timesFile, char *commons);
-void freeCTR(void *ctr);
-uint64_t start(void *ctr, uint32_t s);
+void * CTR_load(char *filename, char *linesFile, char *timesFile, char *commons);
+void CTR_free(void *ctr);
+uint64_t CTR_start(void *ctr, uint32_t s);
+uint64_t CTR_end(void *ctr, uint32_t s);
+uint64_t CTR_switch(void *ctr, uint32_t s);
+uint64_t CTR_board(void *ctr, uint32_t s);
 
 #ifdef __cplusplus
 }

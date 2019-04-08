@@ -25,7 +25,7 @@ QueryType queryTypes[16] = {
     {15, 4, false, get_from_x_to_y}
 };
 
-void * loadCTR(char *filename, char *linesFile, char *timesFile, char *commons) {
+void * CTR_load(char *filename, char *linesFile, char *timesFile, char *commons) {
     void *index;
     ulong Index_size;
     int error= load_index (filename, linesFile, timesFile, &index);
@@ -55,14 +55,39 @@ void * loadCTR(char *filename, char *linesFile, char *timesFile, char *commons) 
     return index;
 }
 
-void freeCTR(void * ctr) {
+void CTR_free(void * ctr) {
     free_index(ctr);
 }
 
-uint64_t start(void * ctr, uint32_t s) {
+uint64_t CTR_start(void * ctr, uint32_t s) {
     TimeQuery q;
     uint values[2] = {1, s};
     q.values = values;
     q.subtype = 0;
     return get_starts_with_x(ctr, &q);
+}
+
+
+uint64_t CTR_end(void * ctr, uint32_t s) {
+    TimeQuery q;
+    uint values[2] = {1, s};
+    q.values = values;
+    q.subtype = 0;
+    return get_ends_with_x(ctr, &q);
+}
+
+uint64_t CTR_switch(void * ctr, uint32_t s) {
+    TimeQuery q;
+    uint values[2] = {1, s};
+    q.values = values;
+    q.subtype = 0;
+    return get_x_in_the_middle(ctr, &q);
+}
+
+uint64_t CTR_board(void * ctr, uint32_t s) {
+    TimeQuery q;
+    uint values[2] = {1, s};
+    q.values = values;
+    q.subtype = 0;
+    return get_uses_x(ctr, &q);
 }
