@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"time"
 )
 
 func ReadCSV() {
@@ -26,6 +27,23 @@ func ReadCSV() {
 	for _, r := range records[1:] {
 		fmt.Println(r)
 		fmt.Println(r[header["stop_name"]])
+	}
+}
+
+func ReadTime() {
+	file, err := os.Open("data/time.txt")
+	LogAndQuit(err)
+	defer file.Close()
+	lineScanner := bufio.NewScanner(file)
+
+	if lineScanner.Scan() {
+		start_time, err = time.Parse("2006-01-02", lineScanner.Text())
+		LogAndQuit(err)
+	}
+
+	if lineScanner.Scan() {
+		end_time, err = time.Parse("2006-01-02", lineScanner.Text())
+		LogAndQuit(err)
 	}
 }
 

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/paulmach/go.geojson"
 	"strconv"
+	"time"
 )
 
 func returnGeoJSON(c *gin.Context, data []byte) {
@@ -26,6 +27,13 @@ func returnGeoJSONFeatureCollection(c *gin.Context, fc *geojson.FeatureCollectio
 func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",
+	})
+}
+
+func TimeRange(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"start": start_time.Format(time.RFC3339),
+		"end":   end_time.Format(time.RFC3339),
 	})
 }
 

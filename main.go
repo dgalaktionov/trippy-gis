@@ -5,10 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"time"
 )
 
 var stops = map[string]Stop{}
 var stop_id_to_ctr = map[string]uint32{}
+var start_time = time.Now()
+var end_time = time.Now()
 
 func main() {
 	var gtfsFlags ArrayFlags
@@ -23,6 +26,7 @@ func main() {
 	defer db.Close()
 	readStops(db)
 	ReadStopId()
+	ReadTime()
 	CTRLoad()
 	defer CTRFree()
 	router := gin.Default()
@@ -32,6 +36,7 @@ func main() {
 	router.StaticFile("/bundle.min.js", "view/bundle.min.js")
 	router.Static("/images", "view/images")
 	router.GET("/ping", Ping)
+	router.GET("/time", TimeRange)
 	router.GET("/stops", GetAllStops)
 	router.GET("/stops/:id", GetStop)
 	router.GET("/index", ShowIndex)

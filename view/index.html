@@ -5,11 +5,12 @@
     <title>Trippy GIS</title>
 </head>
 <body>
-    <div id="map">
-        <!-- leaflet map goes here -->
-    </div>
-
     <div id="app">
+        <div id="map">
+            <!-- leaflet map goes here -->
+        </div>
+
+        <datepicker class="trippy-map-filter" placeholder="Select a date" v-model="selectedDate"></datepicker>
         <stop-popup ref="hiddenStopPopup"></stop-popup>
     </div>
 

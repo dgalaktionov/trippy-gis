@@ -11,7 +11,10 @@ Vue.use(require('vue-async-computed'));
 
 let app = new Vue({
     el: '#app',
-    components: {Hello, StopPopup, Datepicker, PulseLoader}
+    components: {Hello, StopPopup, Datepicker, PulseLoader},
+    data: {
+        selectedDate: null,
+    }
 });
 
 let map = L.map('map', {
@@ -46,6 +49,10 @@ getty.jsonGet("/stops").then(function (fc) {
 });
 
 
+getty.jsonGet("/time").then(function (timeRange) {
+    console.log(timeRange);
+});
+
+
 window.app = app;
 window.Vue = Vue;
-window.PulseLoader = PulseLoader;

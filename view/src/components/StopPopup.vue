@@ -1,12 +1,12 @@
 <template>
-    <div class="stopPopup" v-show="stop.properties.name">
-        <div class="stopPopupTitle">{{stop.properties.name}}</div>
+    <div class="stop-popup" v-show="stop.properties.name">
+        <div class="stop-popup-title">{{stop.properties.name}}</div>
         <pulse-loader :loading="isLoading" color="#102938" size="12px"></pulse-loader>
-        <div class="stopPopupStats" v-show="!isLoading">
-            <div class="stopPopupCounter">Board: {{stats.board}}</div>
-            <div class="stopPopupCounter">Switch: {{stats.switch}}</div>
-            <div class="stopPopupCounter">Start: {{stats.start}}</div>
-            <div class="stopPopupCounter">End: {{stats.end}}</div>
+        <div class="stop-popup-stats" v-show="!isLoading">
+            <div class="stop-popup-counter">Board: {{stats.board}}</div>
+            <div class="stop-popup-counter">Switch: {{stats.switch}}</div>
+            <div class="stop-popup-counter">Start: {{stats.start}}</div>
+            <div class="stop-popup-counter">End: {{stats.end}}</div>
         </div>
     </div>
 </template>
