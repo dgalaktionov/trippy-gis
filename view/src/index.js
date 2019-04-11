@@ -4,16 +4,22 @@ let Vue = require("vue");
 let Hello = require("./components/Hello.vue");
 let StopPopup = require("./components/StopPopup.vue");
 let Datepicker = require("vuejs-datepicker");
+let VueTimepicker = require("vuejs-timepicker");
 let PulseLoader = require("vue-spinner/dist/vue-spinner.min").PulseLoader;
 let getty = require("./getty");
 
+window.Vue = Vue;
 Vue.use(require('vue-async-computed'));
 
 let app = new Vue({
     el: '#app',
-    components: {Hello, StopPopup, Datepicker, PulseLoader},
+    components: {Hello, StopPopup, Datepicker, PulseLoader, VueTimepicker},
     data: {
         selectedDate: null,
+        selectedTime: {
+            HH: "08",
+            mm: "00"
+        },
     }
 });
 
@@ -55,4 +61,4 @@ getty.jsonGet("/time").then(function (timeRange) {
 
 
 window.app = app;
-window.Vue = Vue;
+window.VueTimepicker = VueTimepicker;

@@ -16,7 +16,7 @@ html,body, #app {
     max-width: 200px;
 }
 
-.trippy-map-filter {
+.trippy-map-filters {
     z-index: 2000;
     position: absolute !important;
     top: 0;
@@ -24,6 +24,10 @@ html,body, #app {
     margin-top: 1rem;
 }
 
-.trippy-map-filter * {
+.trippy-map-filter {
+    display: inline-block;
+}
+
+.trippy-map-filter2 * {
     z-index: 2000;
 }

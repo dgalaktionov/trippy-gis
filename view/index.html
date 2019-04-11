@@ -10,7 +10,11 @@
             <!-- leaflet map goes here -->
         </div>
 
-        <datepicker class="trippy-map-filter" placeholder="Select a date" v-model="selectedDate"></datepicker>
+        <div class="trippy-map-filters">
+            <datepicker class="trippy-map-filter" placeholder="Select a date" v-model="selectedDate"></datepicker>
+            <vue-timepicker v-model="selectedTime"></vue-timepicker>
+        </div>
+
         <stop-popup ref="hiddenStopPopup"></stop-popup>
     </div>
 

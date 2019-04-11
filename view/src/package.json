@@ -1,13 +1,14 @@
 {
   "name": "trippy-gis",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "main": "bundle.js",
   "dependencies": {
     "leaflet": "^1.4.0",
     "vue": "^2.6.10",
     "vue-async-computed": "^3.6.1",
     "vue-spinner": "^1.0.3",
-    "vuejs-datepicker": "^1.5.4"
+    "vuejs-datepicker": "^1.5.4",
+    "vuejs-timepicker": "git+https://github.com/xxRockOnxx/vue2-timepicker.git"
   },
   "scripts": {
     "build": "browserify index.js > ../bundle.js"
