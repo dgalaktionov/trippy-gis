@@ -1,16 +1,17 @@
 require ("./index.css");
 let L = require("leaflet");
-require("leaflet-toolbar");
 let Vue = require("vue");
 let Hello = require("./components/Hello.vue");
 let StopPopup = require("./components/StopPopup.vue");
+let Datepicker = require("vuejs-datepicker");
+let PulseLoader = require("vue-spinner/dist/vue-spinner.min").PulseLoader;
 let getty = require("./getty");
 
 Vue.use(require('vue-async-computed'));
 
 let app = new Vue({
     el: '#app',
-    components: {Hello, StopPopup}
+    components: {Hello, StopPopup, Datepicker, PulseLoader}
 });
 
 let map = L.map('map', {
@@ -47,3 +48,4 @@ getty.jsonGet("/stops").then(function (fc) {
 
 window.app = app;
 window.Vue = Vue;
+window.PulseLoader = PulseLoader;

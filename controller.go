@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/paulmach/go.geojson"
-	"log"
 	"strconv"
 )
 
@@ -75,8 +74,6 @@ func GetStopStats(c *gin.Context) {
 	startCTR := CTRStart(sId)
 	endCTR := CTREnd(sId)
 	boardCTR := CTRBoard(sId)
-
-	log.Printf("%d %d %d\n", boardCTR, startCTR, endCTR)
 
 	c.JSON(200, gin.H{
 		"start":  startCTR,
