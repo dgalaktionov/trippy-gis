@@ -25,6 +25,22 @@ QueryType queryTypes[16] = {
     {15, 4, false, get_from_x_to_y}
 };
 
+TimeQuery *query;
+
+TimeQuery * prepareQuery() {
+    TimeQuery *tq = (TimeQuery *) malloc(sizeof(TimeQuery));
+    tq->values = (uint *) malloc(sizeof(uint)*8);
+    tq->time = (TimeRange *) malloc(sizeof(TimeRange));
+
+    return tq;
+}
+
+void freeQuery(TimeQuery *tq) {
+    free(tq->values);
+    free(tq->time);
+    free(tq);
+}
+
 void * CTR_load(char *filename, char *linesFile, char *timesFile, char *commons) {
     void *index;
     ulong Index_size;
@@ -52,42 +68,50 @@ void * CTR_load(char *filename, char *linesFile, char *timesFile, char *commons)
     free(outfilename);
 
     index_size(index, &Index_size);
+
+    query = prepareQuery();
+
     return index;
 }
 
 void CTR_free(void * ctr) {
     free_index(ctr);
+    freeQuery(query);
 }
 
-uint64_t CTR_start(void * ctr, uint32_t s) {
-    TimeQuery q;
-    uint values[2] = {1, s};
-    q.values = values;
-    q.subtype = 0;
-    return get_starts_with_x(ctr, &q);
+uint64_t CTR_start(void * ctr, uint32_t s, uint32_t h_start, uint32_t h_end) {
+    query->values[1] = s;
+    query->time->h_start = h_start;
+    query->time->h_end = h_end;
+    query->subtype = 0;
+    if (h_end) query->subtype |= XY_TIME_START;
+    return get_starts_with_x(ctr, query);
 }
 
 
-uint64_t CTR_end(void * ctr, uint32_t s) {
-    TimeQuery q;
-    uint values[2] = {1, s};
-    q.values = values;
-    q.subtype = 0;
-    return get_ends_with_x(ctr, &q);
+uint64_t CTR_end(void * ctr, uint32_t s, uint32_t h_start, uint32_t h_end) {
+    query->values[1] = s;
+    query->time->h_start = h_start;
+    query->time->h_end = h_end;
+    query->subtype = 0;
+    if (h_end) query->subtype |= XY_TIME_END;
+    return get_ends_with_x(ctr, query);
 }
 
-uint64_t CTR_switch(void * ctr, uint32_t s) {
-    TimeQuery q;
-    uint values[2] = {1, s};
-    q.values = values;
-    q.subtype = 0;
-    return get_x_in_the_middle(ctr, &q);
+uint64_t CTR_switch(void * ctr, uint32_t s, uint32_t h_start, uint32_t h_end) {
+    query->values[1] = s;
+    query->time->h_start = h_start;
+    query->time->h_end = h_end;
+    query->subtype = 0;
+    if (h_end) query->subtype |= XY_TIME_START;
+    return get_x_in_the_middle(ctr, query);
 }
 
-uint64_t CTR_board(void * ctr, uint32_t s) {
-    TimeQuery q;
-    uint values[2] = {1, s};
-    q.values = values;
-    q.subtype = 0;
-    return get_uses_x(ctr, &q);
+uint64_t CTR_board(void * ctr, uint32_t s, uint32_t h_start, uint32_t h_end) {
+    query->values[1] = s;
+    query->time->h_start = h_start;
+    query->time->h_end = h_end;
+    query->subtype = 0;
+    if (h_end) query->subtype |= XY_TIME_START;
+    return get_uses_x(ctr, query);
 }

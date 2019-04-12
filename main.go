@@ -41,7 +41,6 @@ func main() {
 	router.GET("/stops/:id", GetStop)
 	router.GET("/index", ShowIndex)
 	router.GET("/", ShowIndex)
-	router.GET("/start/:id", GetStart)
 	router.GET("/stop_stats/:id", GetStopStats)
 	err := router.Run()
 	LogAndQuit(err)

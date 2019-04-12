@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/paulmach/go.geojson"
-	"strconv"
 	"time"
 )
 
@@ -66,22 +65,14 @@ func ShowIndex(c *gin.Context) {
 	c.HTML(200, "index.html", gin.H{})
 }
 
-func GetStart(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	LogAndPanic2(err, c)
-	c.JSON(200, gin.H{
-		"count": CTRStart(uint32(id)),
-	})
-}
-
 func GetStopStats(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	LogAndPanic2(err, c)
+	id := Atoi32(c.Param("id"), c)
+	fromTime := Atoi32(c.DefaultQuery("from_time", "0"), c)
+	toTime := Atoi32(c.DefaultQuery("to_time", "0"), c)
 
-	sId := uint32(id)
-	startCTR := CTRStart(sId)
-	endCTR := CTREnd(sId)
-	boardCTR := CTRBoard(sId)
+	startCTR := CTRStart(id, fromTime, toTime)
+	endCTR := CTREnd(id, fromTime, toTime)
+	boardCTR := CTRBoard(id, fromTime, toTime)
 
 	c.JSON(200, gin.H{
 		"start":  startCTR,

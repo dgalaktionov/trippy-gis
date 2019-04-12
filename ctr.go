@@ -34,18 +34,18 @@ func CTRFree() {
 	ctr = nil
 }
 
-func CTRStart(s uint32) uint64 {
-	return uint64(C.CTR_start(ctr, C.uint(s)))
+func CTRStart(s uint32, fromTime uint32, toTime uint32) uint64 {
+	return uint64(C.CTR_start(ctr, C.uint(s), C.uint(fromTime), C.uint(toTime)))
 }
 
-func CTREnd(s uint32) uint64 {
-	return uint64(C.CTR_end(ctr, C.uint(s)))
+func CTREnd(s uint32, fromTime uint32, toTime uint32) uint64 {
+	return uint64(C.CTR_end(ctr, C.uint(s), C.uint(fromTime), C.uint(toTime)))
 }
 
-func CTRSwitch(s uint32) uint64 {
-	return uint64(C.CTR_switch(ctr, C.uint(s)))
+func CTRSwitch(s uint32, fromTime uint32, toTime uint32) uint64 {
+	return uint64(C.CTR_switch(ctr, C.uint(s), C.uint(fromTime), C.uint(toTime)))
 }
 
-func CTRBoard(s uint32) uint64 {
-	return uint64(C.CTR_board(ctr, C.uint(s)))
+func CTRBoard(s uint32, fromTime uint32, toTime uint32) uint64 {
+	return uint64(C.CTR_board(ctr, C.uint(s), C.uint(fromTime), C.uint(toTime)))
 }

@@ -11,7 +11,8 @@
         </div>
 
         <div class="trippy-map-filters">
-            <datepicker class="trippy-map-filter" placeholder="Select a date" v-model="selectedDate"></datepicker>
+            <datepicker class="trippy-map-filter" placeholder="Select a date" v-model="selectedDate" :typeable="true"></datepicker>
+            <!-- TODO: make the timepicker editable as text -->
             <vue-timepicker v-model="selectedTime"></vue-timepicker>
         </div>
 
