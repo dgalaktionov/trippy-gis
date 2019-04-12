@@ -48,11 +48,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let stopLayer = L.geoJSON(null, {
     onEachFeature: function(feature, layer) {
         layer.bindPopup(() => {
+            layer.setStyle({color: "#f00"});
             app.$refs.hiddenStopPopup.stop = feature;
             return app.$refs.hiddenStopPopup.$el;
         }, {
             maxWidth: "auto"
-        });
+        }).on("popupclose", () => layer.setStyle({color: "#3388ff"}));
     },
     pointToLayer: function(feature, coords) {
         return L.circleMarker(coords, {
@@ -77,4 +78,5 @@ getty.jsonGet("/time").then(function (timeRange) {
 
 
 window.app = app;
+window.map = map;
 window.VueTimepicker = VueTimepicker;

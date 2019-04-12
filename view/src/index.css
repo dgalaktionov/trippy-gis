@@ -27,7 +27,3 @@ html,body, #app {
 .trippy-map-filter {
     display: inline-block;
 }
-
-.trippy-map-filter2 * {
-    z-index: 2000;
-}
