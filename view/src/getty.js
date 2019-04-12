@@ -34,4 +34,25 @@ function jsonGet(url) {
     });
 }
 
-module.exports = {simplyGet, jsonGet};
+function getStopStats(idStop, fromTime, toTime) {
+    var url = "/stop_stats/" + idStop;
+    let params = {};
+
+    if (fromTime && fromTime >= 0) {
+        params["from_time"] = fromTime;
+    }
+
+    if (toTime && toTime >= 0) {
+        params["to_time"] = toTime;
+    }
+
+    let paramsString = new URLSearchParams(params).toString();
+
+    if (paramsString) {
+        url += "?" + paramsString;
+    }
+
+    return jsonGet(url);
+}
+
+module.exports = {simplyGet, jsonGet, getStopStats};

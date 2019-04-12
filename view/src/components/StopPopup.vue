@@ -27,9 +27,19 @@
         asyncComputed: {
           stats: {
               get () {
-                  this.isLoading = true;
+                  if (this.stop.properties.id === 0) {
+                      return {};
+                  }
 
-                  return getty.jsonGet("/stop_stats/" + this.stop.properties.id).then(x => {
+                  this.isLoading = true;
+                  let selectedDate = this.$parent.selectedDate || new Date(0);
+                  let fakeDate = new Date(selectedDate);
+                  fakeDate.setDate(selectedDate.getDate()+1);
+
+                  return getty.getStopStats(this.stop.properties.id,
+                      this.$parent.secondsFromMinDate(selectedDate),
+                      this.$parent.secondsFromMinDate(fakeDate)).then(x => {
+
                       this.isLoading = false;
                       return x;
                   });

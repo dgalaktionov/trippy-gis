@@ -15,11 +15,24 @@ let app = new Vue({
     el: '#app',
     components: {Hello, StopPopup, Datepicker, PulseLoader, VueTimepicker},
     data: {
+        disabledDates: {
+            to: undefined,
+            from: undefined,
+        },
         selectedDate: null,
         selectedTime: {
             HH: "08",
             mm: "00"
         },
+    },
+    methods: {
+        secondsFromMinDate(d) {
+            if (this.disabledDates.to) {
+                return (d.getTime() - this.disabledDates.to.getTime())/1000;
+            } else {
+                return -1;
+            }
+        }
     }
 });
 
@@ -56,7 +69,10 @@ getty.jsonGet("/stops").then(function (fc) {
 
 
 getty.jsonGet("/time").then(function (timeRange) {
-    console.log(timeRange);
+    app.disabledDates.to = new Date(timeRange.start);
+    let maxDate = new Date(timeRange.end);
+    maxDate.setHours(23,59,59);
+    app.disabledDates.from = maxDate;
 });
 
 
