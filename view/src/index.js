@@ -3,6 +3,7 @@ let L = require("leaflet");
 let Vue = require("vue");
 let Hello = require("./components/Hello.vue");
 let StopPopup = require("./components/StopPopup.vue");
+let TimeFilter = require("./components/TimeFilter.vue");
 let Datepicker = require("vuejs-datepicker");
 let VueTimepicker = require("vuejs-timepicker");
 let PulseLoader = require("vue-spinner/dist/vue-spinner.min").PulseLoader;
@@ -13,27 +14,13 @@ Vue.use(require('vue-async-computed'));
 
 let app = new Vue({
     el: '#app',
-    components: {Hello, StopPopup, Datepicker, PulseLoader, VueTimepicker},
+    components: {Hello, StopPopup, TimeFilter, Datepicker, PulseLoader, VueTimepicker},
     data: {
-        disabledDates: {
-            to: undefined,
-            from: undefined,
-        },
+        minDate: new Date(0),
+        maxDate: null,
         selectedDate: null,
-        selectedTime: {
-            HH: "08",
-            mm: "00"
-        },
+        selectedStop: {properties: {id: 0, name: ""}},
     },
-    methods: {
-        secondsFromMinDate(d) {
-            if (this.disabledDates.to) {
-                return (d.getTime() - this.disabledDates.to.getTime())/1000;
-            } else {
-                return -1;
-            }
-        }
-    }
 });
 
 let map = L.map('map', {
@@ -49,7 +36,7 @@ let stopLayer = L.geoJSON(null, {
     onEachFeature: function(feature, layer) {
         layer.bindPopup(() => {
             layer.setStyle({color: "#f00"});
-            app.$refs.hiddenStopPopup.stop = feature;
+            app.selectedStop = feature;
             return app.$refs.hiddenStopPopup.$el;
         }, {
             maxWidth: "auto"
@@ -70,10 +57,10 @@ getty.jsonGet("/stops").then(function (fc) {
 
 
 getty.jsonGet("/time").then(function (timeRange) {
-    app.disabledDates.to = new Date(timeRange.start);
+    app.minDate = new Date(timeRange.start);
     let maxDate = new Date(timeRange.end);
     maxDate.setHours(23,59,59);
-    app.disabledDates.from = maxDate;
+    app.maxDate = maxDate;
 });
 
 
