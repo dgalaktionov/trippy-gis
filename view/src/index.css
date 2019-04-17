@@ -1,7 +1,7 @@
 @import url("node_modules/leaflet/dist/leaflet.css");
 @import url("node_modules/leaflet-toolbar/dist/leaflet.toolbar.css");
 
-html,body {
+html,body, #app {
     /*background-color: #000;*/
     height: 100%;
     margin: 0;
@@ -11,25 +11,19 @@ html,body {
     height: 100%;
 }
 
-.trippyPopupTitle {
-    width: 200px;
-    height: 0;
-    background-color: #fff;
-    display:flex;
-    align-items: flex-end;
-    justify-content: center;
-    margin-left: -85px;
-}
-
-.trippyText {
-    background-color: #fff;
-}
-
-.stopPopupList {
-    margin-top: 0;
-}
-
-.stopPopup {
+.stop-popup {
     min-width: 200px;
     max-width: 200px;
+}
+
+.trippy-map-filters {
+    z-index: 2000;
+    position: absolute !important;
+    top: 0;
+    margin-left: 6rem;
+    margin-top: 1rem;
+}
+
+.trippy-map-filter {
+    display: inline-block;
 }

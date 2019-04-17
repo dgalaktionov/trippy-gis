@@ -3,8 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/paulmach/go.geojson"
-	"log"
-	"strconv"
+	"time"
 )
 
 func returnGeoJSON(c *gin.Context, data []byte) {
@@ -27,6 +26,13 @@ func returnGeoJSONFeatureCollection(c *gin.Context, fc *geojson.FeatureCollectio
 func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",
+	})
+}
+
+func TimeRange(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"start": start_time.Format(time.RFC3339),
+		"end":   end_time.Format(time.RFC3339),
 	})
 }
 
@@ -59,24 +65,14 @@ func ShowIndex(c *gin.Context) {
 	c.HTML(200, "index.html", gin.H{})
 }
 
-func GetStart(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	LogAndPanic2(err, c)
-	c.JSON(200, gin.H{
-		"count": CTRStart(uint32(id)),
-	})
-}
-
 func GetStopStats(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	LogAndPanic2(err, c)
+	id := Atoi32(c.Param("id"), c)
+	fromTime := Atoi32(c.DefaultQuery("from_time", "0"), c)
+	toTime := Atoi32(c.DefaultQuery("to_time", "0"), c)
 
-	sId := uint32(id)
-	startCTR := CTRStart(sId)
-	endCTR := CTREnd(sId)
-	boardCTR := CTRBoard(sId)
-
-	log.Printf("%d %d %d\n", boardCTR, startCTR, endCTR)
+	startCTR := CTRStart(id, fromTime, toTime)
+	endCTR := CTREnd(id, fromTime, toTime)
+	boardCTR := CTRBoard(id, fromTime, toTime)
 
 	c.JSON(200, gin.H{
 		"start":  startCTR,

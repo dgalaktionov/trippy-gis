@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -26,15 +27,13 @@ func LogAndPanic(err error) bool {
 
 // A modern language with no function overloading O_o
 func LogAndPanic2(err error, c *gin.Context) bool {
-	if err != nil {
+	if err != nil && c != nil {
 		c.JSON(500, gin.H{
 			"message": "shit's on fire yo",
 		})
-		log.Panicln(err)
-		return false
-	} else {
-		return true
 	}
+
+	return LogAndPanic(err)
 }
 
 type ArrayFlags []string
@@ -46,4 +45,10 @@ func (i *ArrayFlags) String() string {
 func (i *ArrayFlags) Set(value string) error {
 	*i = append(*i, value)
 	return nil
+}
+
+func Atoi32(s string, c *gin.Context) uint32 {
+	i, err := strconv.Atoi(s)
+	LogAndPanic2(err, c)
+	return uint32(i)
 }
