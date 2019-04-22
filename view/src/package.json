@@ -6,6 +6,7 @@
     "leaflet": "^1.4.0",
     "vue": "^2.6.10",
     "vue-async-computed": "^3.6.1",
+    "vue-router": "^3.0.6",
     "vue-spinner": "^1.0.3",
     "vuejs-datepicker": "^1.5.4",
     "vuejs-timepicker": "git+https://github.com/xxRockOnxx/vue2-timepicker.git"

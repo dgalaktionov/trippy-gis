@@ -7,13 +7,18 @@ let TimeFilter = require("./components/TimeFilter.vue");
 let Datepicker = require("vuejs-datepicker");
 let VueTimepicker = require("vuejs-timepicker");
 let PulseLoader = require("vue-spinner/dist/vue-spinner.min").PulseLoader;
+let VueRouter = require("vue-router");
 let getty = require("./getty");
+
+const router = new VueRouter({mode: "history"});
 
 window.Vue = Vue;
 Vue.use(require('vue-async-computed'));
+Vue.use(VueRouter);
 
 let app = new Vue({
     el: '#app',
+    router,
     components: {Hello, StopPopup, TimeFilter, Datepicker, PulseLoader, VueTimepicker},
     data: {
         minDate: new Date(0),
