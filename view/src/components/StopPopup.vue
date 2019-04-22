@@ -18,10 +18,25 @@
     module.exports = {
         name: "StopPopup",
         components: {PulseLoader},
+        props: {
+          stop: {
+              required: true,
+              type: Object,
+          }
+        },
         data() {
             return {
-                stop: {properties: {id: 0, name: ""}},
+                // stop: {properties: {id: 0, name: ""}},
                 isLoading: true,
+            }
+        },
+        methods: {
+            secondsFromMinDate(d) {
+                if (this.$root.minDate) {
+                    return (d.getTime() - this.$root.minDate.getTime())/1000;
+                } else {
+                    return -1;
+                }
             }
         },
         asyncComputed: {
@@ -32,16 +47,15 @@
                   }
 
                   this.isLoading = true;
-                  let selectedDate = this.$parent.selectedDate || new Date(0);
+                  let selectedDate = this.$root.selectedDate || new Date(0);
                   let fakeDate = new Date(selectedDate);
                   fakeDate.setDate(selectedDate.getDate()+1);
 
                   return getty.getStopStats(this.stop.properties.id,
-                      this.$parent.secondsFromMinDate(selectedDate),
-                      this.$parent.secondsFromMinDate(fakeDate)).then(x => {
-
-                      this.isLoading = false;
-                      return x;
+                      this.secondsFromMinDate(selectedDate),
+                      this.secondsFromMinDate(fakeDate)).then(x => {
+                          this.isLoading = false;
+                          return x;
                   });
               },
 
