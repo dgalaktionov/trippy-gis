@@ -25,7 +25,7 @@ let app = new Vue({
         maxDate: null,
         selectedDate: null,
         selectedStop: {properties: {id: 0, name: ""}},
-    },
+    }
 });
 
 let map = L.map('map', {

@@ -3,7 +3,7 @@
         <div>
             <datepicker class="trippy-map-filter" placeholder="Select a date" v-model="selectedDate" :typeable="true"
                         :disabled-dates="disabledDates" :open-date="disabledDates.to" :clear-button="true"
-                        format="yyyy-MM-dd" :monday-first="true"></datepicker>
+                        format="yyyy-MM-dd" :monday-first="true" @selected="onSelectedDate"></datepicker>
             <!-- TODO: make the timepicker editable as text -->
             <vue-timepicker v-model="selectedTime"></vue-timepicker>
         </div>
@@ -59,6 +59,22 @@
                         from: this.maxDate,
                     }
                 }
+            }
+        },
+        methods: {
+            onSelectedDate(d) {
+                if (d) {
+                    this.$router.push({query: {date: d.toISOString().substring(0, 10)}});
+                } else {
+                    this.$router.push({});
+                }
+            }
+        },
+        mounted() {
+            let dateStr = this.$route.query.date;
+
+            if (dateStr) {
+                this.selectedDate = new Date(dateStr);
             }
         }
     }
