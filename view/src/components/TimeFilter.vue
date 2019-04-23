@@ -3,8 +3,8 @@
         <div>
             <datepicker class="trippy-map-filter" placeholder="Select a date" v-model="selectedDate" :typeable="true"
                         :disabled-dates="disabledDates" :open-date="disabledDates.to" :clear-button="true"
-                        format="yyyy-MM-dd" :monday-first="true" @selected="onSelectedDate"></datepicker>
-            <vue-timepicker v-model="selectedTime" :typeable="true"></vue-timepicker>
+                        format="yyyy-MM-dd" :monday-first="true" @selected="onSelectedDate" :use-utc="true"></datepicker>
+            <vue-timepicker v-model="selectedTime" :typeable="true" :disabled="!selectedDate"></vue-timepicker>
         </div>
 
         <div>
@@ -33,14 +33,6 @@
 
             }
         },
-        data() {
-            return {
-                selectedTime: {
-                    HH: "08",
-                    mm: "00"
-                }
-            }
-        },
         computed: {
             selectedDate: {
                 get() {
@@ -48,7 +40,26 @@
                 },
 
                 set(d) {
-                    this.$emit('input', d);
+                    this.$emit("input", d);
+                }
+            },
+            selectedTime: {
+                get() {
+                    if (this.selectedDate) {
+                        return {
+                            HH: this.timePad(this.selectedDate.getUTCHours()),
+                            mm: this.timePad(this.selectedDate.getUTCMinutes())
+                        };
+                    } else {
+                        return {HH: "", mm: ""};
+                    }
+                },
+                set (t) {
+                    console.log(t);
+                    if (this.selectedDate) {
+                        this.selectedDate = new Date(this.selectedDate.setUTCHours(t.HH, t.mm));
+                        this.onSelectedDate(this.selectedDate);
+                    }
                 }
             },
             disabledDates: {
@@ -63,16 +74,28 @@
         methods: {
             onSelectedDate(d) {
                 if (d) {
-                    this.$router.push({query: {date: d.toISOString().substring(0, 10)}});
+                    this.$router.push({query: {date: d.toISOString().substring(0, 16)}});
                 } else {
                     this.$router.push({});
+                }
+            },
+            timePad(x) {
+                if (x < 10) {
+                    return "0" + x;
+                } else {
+                    return x + "";
                 }
             }
         },
         mounted() {
-            let dateStr = this.$route.query.date;
+            var dateStr = this.$route.query.date;
 
             if (dateStr) {
+                // contains time
+                if (dateStr.length >= 16 && dateStr.indexOf(":") >= 0) {
+                    dateStr += "Z"; // UTC
+                }
+
                 this.selectedDate = new Date(dateStr);
             }
         }
