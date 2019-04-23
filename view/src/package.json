@@ -9,7 +9,7 @@
     "vue-router": "^3.0.6",
     "vue-spinner": "^1.0.3",
     "vuejs-datepicker": "^1.5.4",
-    "vuejs-timepicker": "git+https://github.com/xxRockOnxx/vue2-timepicker.git"
+    "vuejs-timepicker": "git+https://github.com/dgalaktionov/vuejs-timepicker.git"
   },
   "scripts": {
     "build": "browserify index.js > ../bundle.js"
