@@ -40,7 +40,7 @@
                 },
 
                 set(d) {
-                    this.$emit("input", d);
+                    this.onSelectedDate(d)
                 }
             },
             selectedTime: {
@@ -55,10 +55,8 @@
                     }
                 },
                 set (t) {
-                    console.log(t);
                     if (this.selectedDate) {
-                        this.selectedDate = new Date(this.selectedDate.setUTCHours(t.HH, t.mm));
-                        this.onSelectedDate(this.selectedDate);
+                        this.onSelectedDate(new Date(this.selectedDate.setUTCHours(t.HH, t.mm)));
                     }
                 }
             },
@@ -73,6 +71,8 @@
         },
         methods: {
             onSelectedDate(d) {
+                this.$emit("input", d);
+
                 if (d) {
                     this.$router.push({query: {date: d.toISOString().substring(0, 16)}});
                 } else {
@@ -91,8 +91,8 @@
             var dateStr = this.$route.query.date;
 
             if (dateStr) {
-                // contains time
                 if (dateStr.length >= 16 && dateStr.indexOf(":") >= 0) {
+                    // contains time
                     dateStr += "Z"; // UTC
                 }
 
