@@ -10,19 +10,10 @@ html,body, #app {
     height: 100%;
 }
 
-.stop-popup {
-    min-width: 200px;
-    max-width: 200px;
-}
-
 .trippy-map-filters {
     z-index: 2000;
     position: absolute !important;
     top: 0;
     margin-left: 6rem;
     margin-top: 1rem;
-}
-
-.trippy-map-filter {
-    display: inline-block;
 }

@@ -23,7 +23,8 @@ let app = new Vue({
     data: {
         minDate: new Date(0),
         maxDate: null,
-        selectedDate: null,
+        startDate: null,
+        endDate: null,
         selectedStop: {properties: {id: 0, name: ""}},
     }
 });

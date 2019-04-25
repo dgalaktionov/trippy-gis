@@ -1,15 +1,9 @@
 <template>
-    <div class="trippy-map-filters">
-        <div>
-            <datepicker class="trippy-map-filter" placeholder="Select a date" v-model="selectedDate" :typeable="true"
-                        :disabled-dates="disabledDates" :open-date="disabledDates.to" :clear-button="true"
-                        format="yyyy-MM-dd" :monday-first="true" @selected="onSelectedDate" :use-utc="true"></datepicker>
-            <vue-timepicker v-model="selectedTime" :typeable="true" :disabled="!selectedDate"></vue-timepicker>
-        </div>
-
-        <div>
-            More selectors
-        </div>
+    <div class="trippy-map-filter">
+        <datepicker :placeholder="placeholder" v-model="selectedDate" :typeable="true"
+                    :disabled-dates="disabledDates" :open-date="disabledDates.to" :clear-button="true"
+                    format="yyyy-MM-dd" :monday-first="true" @selected="onSelectedDate" :use-utc="true"></datepicker>
+        <vue-timepicker v-model="selectedTime" :typeable="true" :disabled="!selectedDate"></vue-timepicker>
     </div>
 </template>
 
@@ -31,6 +25,15 @@
 
             maxDate: {
 
+            },
+
+            urlParam: {
+                type: String
+            },
+
+            placeholder: {
+                type: String,
+                default: "Select a date"
             }
         },
         computed: {
@@ -72,12 +75,15 @@
         methods: {
             onSelectedDate(d) {
                 this.$emit("input", d);
+                let q = JSON.parse(JSON.stringify(this.$route.query || {}));
 
-                if (d) {
-                    this.$router.push({query: {date: d.toISOString().substring(0, 16)}});
+                if (d && this.urlParam) {
+                    q[this.urlParam] = d.toISOString().substring(0, 16);
                 } else {
-                    this.$router.push({});
+                    delete q[this.urlParam]
                 }
+
+                this.$router.push({query: q});
             },
             timePad(x) {
                 if (x < 10) {
@@ -88,7 +94,7 @@
             }
         },
         mounted() {
-            var dateStr = this.$route.query.date;
+            var dateStr = this.$route.query[this.urlParam];
 
             if (dateStr) {
                 if (dateStr.length >= 16 && dateStr.indexOf(":") >= 0) {
@@ -103,5 +109,7 @@
 </script>
 
 <style scoped>
-
+    .trippy-map-filter > * {
+        display: inline-block;
+    }
 </style>

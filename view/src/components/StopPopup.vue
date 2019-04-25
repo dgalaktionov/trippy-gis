@@ -47,13 +47,17 @@
                   }
 
                   this.isLoading = true;
-                  let selectedDate = this.$root.selectedDate || new Date(0);
-                  let fakeDate = new Date(selectedDate);
-                  fakeDate.setDate(selectedDate.getDate()+1);
+                  var startDate = new Date(0);
+                  var endDate = new Date(0);
+
+                  if (this.$root.startDate || this.$root.endDate) {
+                      startDate = this.$root.startDate || this.$root.minDate;
+                      endDate = this.$root.endDate || this.$root.maxDate;
+                  }
 
                   return getty.getStopStats(this.stop.properties.id,
-                      this.secondsFromMinDate(selectedDate),
-                      this.secondsFromMinDate(fakeDate)).then(x => {
+                      this.secondsFromMinDate(startDate),
+                      this.secondsFromMinDate(endDate)).then(x => {
                           this.isLoading = false;
                           return x;
                   });
@@ -68,5 +72,8 @@
 </script>
 
 <style scoped>
-
+    .stop-popup {
+        min-width: 200px;
+        max-width: 200px;
+    }
 </style>

@@ -10,7 +10,13 @@
             <!-- leaflet map goes here -->
         </div>
 
-        <time-filter ref="startTimeFilter" v-model="selectedDate" v-bind:min-date="minDate" v-bind:max-date="maxDate"></time-filter>
+        <div class="trippy-map-filters">
+            <time-filter ref="startTimeFilter" v-model="startDate" v-bind:min-date="minDate" v-bind:max-date="maxDate"
+                         url-param="startDate" placeholder="Select a start date"></time-filter>
+            <time-filter ref="startTimeFilter" v-model="endDate" v-bind:min-date="minDate" v-bind:max-date="maxDate"
+                         url-param="endDate" placeholder="Select an end date"></time-filter>
+        </div>
+
         <stop-popup ref="hiddenStopPopup" v-bind:stop="selectedStop"></stop-popup>
     </div>
 
