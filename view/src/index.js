@@ -3,6 +3,7 @@ let L = require("leaflet");
 let Vue = require("vue");
 let Hello = require("./components/Hello.vue");
 let StopPopup = require("./components/StopPopup.vue");
+let DateTimePicker = require("./components/DateTimePicker.vue");
 let TimeFilter = require("./components/TimeFilter.vue");
 let Datepicker = require("vuejs-datepicker");
 let VueTimepicker = require("vuejs-timepicker");
@@ -19,12 +20,14 @@ Vue.use(VueRouter);
 let app = new Vue({
     el: '#app',
     router,
-    components: {Hello, StopPopup, TimeFilter, Datepicker, PulseLoader, VueTimepicker},
+    components: {Hello, StopPopup, DateTimePicker, TimeFilter, Datepicker, PulseLoader, VueTimepicker},
     data: {
         minDate: new Date(0),
         maxDate: null,
-        startDate: null,
-        endDate: null,
+        selectedDate: {
+            startDate: null,
+            endDate: null,
+        },
         selectedStop: {properties: {id: 0, name: ""}},
     }
 });
@@ -72,4 +75,3 @@ getty.jsonGet("/time").then(function (timeRange) {
 
 window.app = app;
 window.map = map;
-window.VueTimepicker = VueTimepicker;

@@ -50,9 +50,9 @@
                   var startDate = new Date(0);
                   var endDate = new Date(0);
 
-                  if (this.$root.startDate || this.$root.endDate) {
-                      startDate = this.$root.startDate || this.$root.minDate;
-                      endDate = this.$root.endDate || this.$root.maxDate;
+                  if (this.$root.selectedDate.startDate || this.$root.selectedDate.endDate) {
+                      startDate = this.$root.selectedDate.startDate || this.$root.minDate;
+                      endDate = this.$root.selectedDate.endDate || this.$root.maxDate;
                   }
 
                   return getty.getStopStats(this.stop.properties.id,
