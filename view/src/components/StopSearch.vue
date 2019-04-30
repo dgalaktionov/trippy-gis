@@ -1,6 +1,6 @@
 <template>
     <div class="trippy-search-field">
-        <autocomplete v-model="selectedStop" :options="stopOptions" option-key="id" option-label="name" placeholder="Find stop by name..."></autocomplete>
+        <autocomplete v-model="selectedStop" :options="stops" option-key="id" option-label="name" placeholder="Find stop by name..."></autocomplete>
     </div>
 </template>
 
@@ -18,14 +18,9 @@
             }
         },
         data() {
-            return{
+            return {
                 selectedStop: null
             };
-        },
-        computed: {
-            stopOptions() {
-                return this.stops.map(s => s.properties);
-            }
         }
     }
 </script>

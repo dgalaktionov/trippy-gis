@@ -101,7 +101,7 @@ let stopLayer = L.geoJSON(null, {
 
 getty.jsonGet("/stops").then(function (fc) {
     stopLayer.addData(fc);
-    app.stops = fc.features;
+    app.stops = fc.features.map(f => f.properties);
 });
 
 
