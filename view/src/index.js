@@ -35,7 +35,8 @@ let app = new Vue({
         xyStops: {
             start: null,
             end: null
-        }
+        },
+        stops: []
     },
     methods: {
         xyFrom(e) {
@@ -100,6 +101,7 @@ let stopLayer = L.geoJSON(null, {
 
 getty.jsonGet("/stops").then(function (fc) {
     stopLayer.addData(fc);
+    app.stops = fc.features;
 });
 
 

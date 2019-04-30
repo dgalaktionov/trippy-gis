@@ -1,7 +1,6 @@
 <template>
     <div class="trippy-search-field">
-        <input type="text" placeholder="Find stop by name...">
-        <autocomplete v-model="fruit" :options="['apple', 'banana']"></autocomplete>
+        <autocomplete v-model="selectedStop" :options="stopOptions" option-key="id" option-label="name" placeholder="Find stop by name..."></autocomplete>
     </div>
 </template>
 
@@ -10,7 +9,24 @@
 
     export default {
         name: "StopSearch",
-        components: {Autocomplete}
+        components: {Autocomplete},
+        props: {
+            stops: {
+                type: Array,
+                required: true,
+                default: []
+            }
+        },
+        data() {
+            return{
+                selectedStop: null
+            };
+        },
+        computed: {
+            stopOptions() {
+                return this.stops.map(s => s.properties);
+            }
+        }
     }
 </script>
 
