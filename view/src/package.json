@@ -1,13 +1,15 @@
 {
   "name": "trippy-gis",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "bundle.js",
   "dependencies": {
     "leaflet": "^1.4.0",
+    "leaflet-contextmenu": "git+https://github.com/aratcliffe/Leaflet.contextmenu.git",
     "vue": "^2.6.10",
     "vue-async-computed": "^3.6.1",
     "vue-router": "^3.0.6",
     "vue-spinner": "^1.0.3",
+    "vue2-autocomplete-js": "^0.2.2",
     "vuejs-datepicker": "^1.5.4",
     "vuejs-timepicker": "git+https://github.com/dgalaktionov/vuejs-timepicker.git"
   },

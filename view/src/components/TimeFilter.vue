@@ -1,5 +1,5 @@
 <template>
-    <div class="trippy-map-filters">
+    <div class="trippy-time-filter">
         <date-time-picker ref="startPicker" v-model="value.startDate" v-bind:min-date="minDate" v-bind:max-date="startMaxDate"
                           url-param="startDate" placeholder="Select a start date"></date-time-picker>
         <date-time-picker ref="endPicker" v-model="value.endDate" v-bind:min-date="endMinDate" v-bind:max-date="maxDate"
@@ -47,11 +47,5 @@
 </script>
 
 <style scoped>
-    .trippy-map-filters {
-        z-index: 2000;
-        position: absolute !important;
-        top: 0;
-        margin-left: 6rem;
-        margin-top: 1rem;
-    }
+
 </style>
