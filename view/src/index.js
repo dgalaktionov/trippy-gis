@@ -11,20 +11,19 @@ let Datepicker = require("vuejs-datepicker");
 let VueTimepicker = require("vuejs-timepicker");
 let PulseLoader = require("vue-spinner/dist/vue-spinner.min").PulseLoader;
 let VueRouter = require("vue-router");
-let VueAutocomplete = require("vue2-autocomplete-js");
+let Autocomplete = require("./node_modules/vue-single-select/dist/VueSingleSelect.vue");
 let getty = require("./getty");
 
 const router = new VueRouter({mode: "history"});
 
 window.Vue = Vue;
-window.VAc = VueAutocomplete;
 Vue.use(require('vue-async-computed'));
 Vue.use(VueRouter);
 
 let app = new Vue({
     el: '#app',
     router,
-    components: {Hello, StopPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker},
+    components: {Hello, StopPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker, Autocomplete},
     data: {
         minDate: new Date(0),
         maxDate: null,
