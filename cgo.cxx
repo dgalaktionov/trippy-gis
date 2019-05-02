@@ -115,3 +115,14 @@ uint64_t CTR_board(void * ctr, uint32_t s, uint32_t h_start, uint32_t h_end) {
     if (h_end) query->subtype |= XY_TIME_START;
     return get_uses_x(ctr, query);
 }
+
+uint64_t CTR_xy(void * ctr, uint32_t s1, uint32_t s2, uint32_t h_start, uint32_t h_end) {
+    query->values[1] = s1;
+    query->values[3] = s2;
+    query->time->h_start = h_start;
+    query->time->h_end = h_end;
+    query->subtype = 0;
+    if (h_end) query->subtype |= XY_TIME_START;
+    // TODO XY_TIME_END
+    return get_from_x_to_y(ctr, query);
+}

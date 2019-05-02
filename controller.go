@@ -81,3 +81,16 @@ func GetStopStats(c *gin.Context) {
 		"board":  boardCTR,
 	})
 }
+
+func GetXY(c *gin.Context) {
+	x := Atoi32(c.Query("x"), c)
+	y := Atoi32(c.Query("y"), c)
+	fromTime := Atoi32(c.DefaultQuery("from_time", "0"), c)
+	toTime := Atoi32(c.DefaultQuery("to_time", "0"), c)
+
+	xy := CTRXY(x, y, fromTime, toTime)
+
+	c.JSON(200, gin.H{
+		"xy": xy,
+	})
+}

@@ -4,6 +4,7 @@ let LContextMenu = require("leaflet-contextmenu");
 let Vue = require("vue");
 let Hello = require("./components/Hello.vue");
 let StopPopup = require("./components/StopPopup.vue");
+let XYPopup = require("./components/XYPopup.vue");
 let DateTimePicker = require("./components/DateTimePicker.vue");
 let TimeFilter = require("./components/TimeFilter.vue");
 let StopSearch = require("./components/StopSearch.vue");
@@ -23,7 +24,7 @@ Vue.use(VueRouter);
 let app = new Vue({
     el: '#app',
     router,
-    components: {Hello, StopPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker, Autocomplete},
+    components: {Hello, StopPopup, XYPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker, Autocomplete},
     data: {
         minDate: new Date(0),
         maxDate: null,
@@ -43,8 +44,6 @@ let app = new Vue({
     },
     methods: {
         selectStop(s, isEndStop) {
-            console.log(s);
-
             if (!s) {
                 return;
             }
@@ -64,8 +63,8 @@ let app = new Vue({
                     weight: 3,
                     renderer: canvasRenderer,
                 }).addTo(map).bindPopup(() => {
-                    return "Number of X to Y trips!"
-                }).openPopup();
+                    return app.$refs.hiddenXYPopup.$el;
+                }, {maxWidth: "auto"}).openPopup();
                 line.on("popupclose", () => line.removeFrom(map));
             } else {
                 let marker = this.stopMarkers[s.id];

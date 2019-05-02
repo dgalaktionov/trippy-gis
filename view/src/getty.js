@@ -55,4 +55,25 @@ function getStopStats(idStop, fromTime, toTime) {
     return jsonGet(url);
 }
 
-module.exports = {simplyGet, jsonGet, getStopStats};
+function getXY(x, y, fromTime, toTime) {
+    var url = "/xy";
+    let params = {x: x, y: y};
+
+    if (fromTime && fromTime >= 0) {
+        params["from_time"] = fromTime;
+    }
+
+    if (toTime && toTime >= 0) {
+        params["to_time"] = toTime;
+    }
+
+    let paramsString = new URLSearchParams(params).toString();
+
+    if (paramsString) {
+        url += "?" + paramsString;
+    }
+
+    return jsonGet(url);
+}
+
+module.exports = {simplyGet, jsonGet, getStopStats, getXY};

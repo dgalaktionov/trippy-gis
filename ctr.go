@@ -49,3 +49,7 @@ func CTRSwitch(s uint32, fromTime uint32, toTime uint32) uint64 {
 func CTRBoard(s uint32, fromTime uint32, toTime uint32) uint64 {
 	return uint64(C.CTR_board(ctr, C.uint(s), C.uint(fromTime), C.uint(toTime)))
 }
+
+func CTRXY(x uint32, y uint32, fromTime uint32, toTime uint32) uint64 {
+	return uint64(C.CTR_xy(ctr, C.uint(x), C.uint(y), C.uint(fromTime), C.uint(toTime)))
+}

@@ -1,5 +1,5 @@
 <template>
-    <div class="stop-popup" v-show="stop.name">
+    <div class="stop-popup" v-if="stop && stop.name">
         <div class="stop-popup-title">{{stop.name}}</div>
         <pulse-loader :loading="isLoading" color="#102938" size="12px"></pulse-loader>
         <div class="stop-popup-stats" v-show="!isLoading">
