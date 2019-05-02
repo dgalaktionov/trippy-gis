@@ -15,12 +15,23 @@
                 type: Array,
                 required: true,
                 default: []
-            }
+            },
+
+            value: {}
         },
-        data() {
-            return {
-                selectedStop: null
-            };
+
+        computed: {
+            selectedStop: {
+                get() {
+                    return this.value;
+                },
+
+                set(s) {
+                    if (s) {
+                        this.$emit("input", s);
+                    }
+                }
+            }
         }
     }
 </script>

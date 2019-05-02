@@ -31,16 +31,22 @@ let app = new Vue({
             startDate: null,
             endDate: null,
         },
-        selectedStop: {properties: {id: 0, name: ""}},
+        selectedStop: {id: 0, name: ""},
         xyStops: {
             start: null,
             end: null
         },
-        stops: []
+        stops: [],
+        stopMarkers: {}
     },
     methods: {
-        xyFrom(e) {
-            console.log(e);
+        xyFrom(s) {
+            let marker = this.stopMarkers[s.id];
+
+            if (marker && marker._map) {
+                marker._map.setView(marker.getLatLng());
+                marker.openPopup();
+            }
         },
         xyTo(e) {
             console.log(e);
@@ -62,14 +68,14 @@ let stopLayer = L.geoJSON(null, {
     onEachFeature: function(feature, layer) {
         layer.bindPopup(() => {
             layer.setStyle({color: "#f00"});
-            app.selectedStop = feature;
+            app.selectedStop = feature.properties;
             return app.$refs.hiddenStopPopup.$el;
         }, {
             maxWidth: "auto"
         }).on("popupclose", () => layer.setStyle({color: "#3388ff"}));
     },
     pointToLayer: function(feature, coords) {
-        return L.circleMarker(coords, {
+        app.stopMarkers[feature.properties.id] = L.circleMarker(coords, {
             radius: 3,
             fillOpacity: 1,
             renderer: canvasRenderer,
@@ -85,16 +91,18 @@ let stopLayer = L.geoJSON(null, {
                 },
                 {
                     text: "Trips from this stop",
-                    callback: () => app.xyFrom(feature),
+                    callback: () => app.xyFrom(feature.properties),
                     index: 2
                 },
                 {
                     text: "Trips to this stop",
-                    callback: () => app.xyTo(feature),
+                    callback: () => app.xyTo(feature.properties),
                     index: 3
                 }
             ]
-        })
+        });
+
+        return app.stopMarkers[feature.properties.id];
     }
 }).addTo(map);
 

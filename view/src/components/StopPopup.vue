@@ -1,6 +1,6 @@
 <template>
-    <div class="stop-popup" v-show="stop.properties.name">
-        <div class="stop-popup-title">{{stop.properties.name}}</div>
+    <div class="stop-popup" v-show="stop.name">
+        <div class="stop-popup-title">{{stop.name}}</div>
         <pulse-loader :loading="isLoading" color="#102938" size="12px"></pulse-loader>
         <div class="stop-popup-stats" v-show="!isLoading">
             <div class="stop-popup-counter">Board: {{stats.board}}</div>
@@ -20,8 +20,7 @@
         components: {PulseLoader},
         props: {
           stop: {
-              required: true,
-              type: Object,
+              required: true
           }
         },
         data() {
@@ -42,7 +41,7 @@
         asyncComputed: {
           stats: {
               get () {
-                  if (this.stop.properties.id === 0) {
+                  if (!this.stop || this.stop.id === 0) {
                       return {};
                   }
 
@@ -55,7 +54,7 @@
                       endDate = this.$root.selectedDate.endDate || this.$root.maxDate;
                   }
 
-                  return getty.getStopStats(this.stop.properties.id,
+                  return getty.getStopStats(this.stop.id,
                       this.secondsFromMinDate(startDate),
                       this.secondsFromMinDate(endDate)).then(x => {
                           this.isLoading = false;
