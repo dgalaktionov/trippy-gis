@@ -11,7 +11,8 @@
         </div>
 
         <div class="trippy-map-filters">
-            <stop-search v-model="selectedStop" v-bind:stops="stops" v-on:input="xyFrom"></stop-search>
+            <stop-search v-model="startStop" v-bind:stops="stops" v-on:input="selectStop" placeholder="Find starting stop"></stop-search>
+            <stop-search v-model="endStop" v-bind:stops="stops" v-on:input="(s) => selectStop(s, true)" placeholder="Find ending stop"></stop-search>
             <time-filter v-model="selectedDate" v-bind:min-date="minDate" v-bind:max-date="maxDate"></time-filter>
         </div>
 

@@ -32,6 +32,8 @@ let app = new Vue({
             endDate: null,
         },
         selectedStop: {id: 0, name: ""},
+        startStop: null,
+        endStop: null,
         xyStops: {
             start: null,
             end: null
@@ -40,16 +42,39 @@ let app = new Vue({
         stopMarkers: {}
     },
     methods: {
-        xyFrom(s) {
-            let marker = this.stopMarkers[s.id];
+        selectStop(s, isEndStop) {
+            console.log(s);
 
-            if (marker && marker._map) {
-                marker._map.setView(marker.getLatLng());
-                marker.openPopup();
+            if (!s) {
+                return;
             }
-        },
-        xyTo(e) {
-            console.log(e);
+
+            if (isEndStop) {
+                this.endStop = s;
+            } else {
+                this.startStop = s;
+            }
+
+            if (this.startStop && this.endStop) {
+                let x = this.stopMarkers[this.startStop.id].getLatLng();
+                let y = this.stopMarkers[this.endStop.id].getLatLng();
+
+                let line = L.polyline([x,y], {
+                    color: "red",
+                    weight: 3,
+                    renderer: canvasRenderer,
+                }).addTo(map).bindPopup(() => {
+                    return "Number of X to Y trips!"
+                }).openPopup();
+                line.on("popupclose", () => line.removeFrom(map));
+            } else {
+                let marker = this.stopMarkers[s.id];
+
+                if (marker && marker._map) {
+                    marker._map.setView(marker.getLatLng());
+                    marker.openPopup();
+                }
+            }
         }
     }
 });
@@ -91,12 +116,12 @@ let stopLayer = L.geoJSON(null, {
                 },
                 {
                     text: "Trips from this stop",
-                    callback: () => app.xyFrom(feature.properties),
+                    callback: () => {app.startStop = feature.properties;},
                     index: 2
                 },
                 {
                     text: "Trips to this stop",
-                    callback: () => app.xyTo(feature.properties),
+                    callback: () => {app.endStop = feature.properties;},
                     index: 3
                 }
             ]

@@ -1,6 +1,6 @@
 <template>
     <div class="trippy-search-field">
-        <autocomplete v-model="selectedStop" :options="stops" option-key="id" option-label="name" placeholder="Find stop by name..."></autocomplete>
+        <autocomplete v-model="selectedStop" :options="stops" option-key="id" option-label="name" :placeholder="placeholder"></autocomplete>
     </div>
 </template>
 
@@ -17,7 +17,12 @@
                 default: []
             },
 
-            value: {}
+            value: {},
+
+            placeholder: {
+                type: String,
+                default: "Find stop by name..."
+            }
         },
 
         computed: {
@@ -27,9 +32,7 @@
                 },
 
                 set(s) {
-                    if (s) {
-                        this.$emit("input", s);
-                    }
+                    this.$emit("input", s);
                 }
             }
         }
