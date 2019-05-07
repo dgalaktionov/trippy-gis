@@ -40,7 +40,8 @@ let app = new Vue({
             end: null
         },
         stops: [],
-        stopMarkers: {}
+        stopMarkers: {},
+        contextStop: null
     },
     methods: {
         selectStop(s, isEndStop) {
@@ -130,6 +131,19 @@ let stopLayer = L.geoJSON(null, {
     }
 }).addTo(map);
 
+map.on("contextmenu.show", (e) => {
+    if (e.sourceTarget && e.sourceTarget.setStyle) {
+        app.contextStop = e.sourceTarget.feature;
+        e.sourceTarget.setStyle({color: "#f00"})
+    }
+});
+
+map.on("contextmenu.hide", (e) => {
+    if (app.contextStop) {
+        app.stopMarkers[app.contextStop.properties.id].setStyle({color: "#3388ff"});
+        //app.contextStop = null;
+    }
+});
 
 getty.jsonGet("/stops").then(function (fc) {
     stopLayer.addData(fc);
