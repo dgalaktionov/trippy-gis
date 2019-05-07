@@ -45,3 +45,4 @@ data/*
 /view/src/node_modules/
 /view/bundle.js
 !/data/stops.txt
+/.idea/workspace.xml

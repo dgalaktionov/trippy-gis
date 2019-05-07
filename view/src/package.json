@@ -14,12 +14,14 @@
     "vuejs-timepicker": "git+https://github.com/dgalaktionov/vuejs-timepicker.git"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "devDependencies": {
     "css-loader": "^2.1.1",
     "file-loader": "^3.0.1",
     "ignore-loader": "^0.1.2",
+    "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "vue-loader": "^15.7.0",

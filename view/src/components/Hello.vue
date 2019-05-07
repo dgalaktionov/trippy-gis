@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    module.exports = {
+    export default {
         name: "Hello",
         data: function() {
             return {

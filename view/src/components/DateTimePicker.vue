@@ -8,10 +8,10 @@
 </template>
 
 <script>
-    let Datepicker = require("vuejs-datepicker").default;
-    let VueTimepicker = require("vuejs-timepicker");
+    import Datepicker from "vuejs-datepicker";
+    import VueTimepicker from "vuejs-timepicker";
 
-    module.exports = {
+    export default {
         name: "DateTimePicker",
         components: {Datepicker, VueTimepicker},
         props: {

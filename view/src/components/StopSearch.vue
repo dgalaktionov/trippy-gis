@@ -5,9 +5,9 @@
 </template>
 
 <script>
-    let Autocomplete = require("vue-single-select").default;
+    import Autocomplete from "vue-single-select";
 
-    module.exports = {
+    export default {
         name: "StopSearch",
         components: {Autocomplete},
         props: {

@@ -12,10 +12,10 @@
 </template>
 
 <script>
-    let getty = require("../getty");
-    let PulseLoader = require("vue-spinner/dist/vue-spinner.min").PulseLoader;
+    import { PulseLoader } from "vue-spinner/dist/vue-spinner";
+    import getty from "../getty";
 
-    module.exports = {
+    export default {
         name: "StopPopup",
         components: {PulseLoader},
         props: {

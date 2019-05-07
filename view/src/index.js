@@ -1,20 +1,19 @@
-require ("./index.css");
-let L = require("leaflet");
-let LContextMenu = require("leaflet-contextmenu");
-let Vue = require("vue");
-let Hello = require("./components/Hello.vue").default;
-let StopPopup = require("./components/StopPopup.vue").default;
-let XYPopup = require("./components/XYPopup.vue").default;
-let DateTimePicker = require("./components/DateTimePicker.vue").default;
-let TimeFilter = require("./components/TimeFilter.vue").default;
-let StopSearch = require("./components/StopSearch.vue").default;
-let Datepicker = require("vuejs-datepicker").default;
-let VueTimepicker = require("vuejs-timepicker");
-let PulseLoader = require("vue-spinner/dist/vue-spinner.min").PulseLoader;
-let VueRouter = require("vue-router").default;
-//let Autocomplete = require("./node_modules/vue-single-select/dist/VueSingleSelect.vue");
-let Autocomplete = require("vue-single-select").default;
-let getty = require("./getty");
+import "./index.css";
+import L from "leaflet";
+import LContextMenu from "leaflet-contextmenu";
+import Vue from "vue";
+import Hello from "./components/Hello.vue";
+import StopPopup from "./components/StopPopup.vue";
+import XYPopup from "./components/XYPopup.vue";
+import DateTimePicker from "./components/DateTimePicker.vue";
+import TimeFilter from "./components/TimeFilter.vue";
+import StopSearch from "./components/StopSearch.vue";
+import Datepicker from "vuejs-datepicker";
+import VueTimepicker from "vuejs-timepicker";
+import { PulseLoader } from "vue-spinner/dist/vue-spinner";
+import VueRouter from "vue-router";
+import Autocomplete from "vue-single-select";
+import getty from "./getty";
 
 const router = new VueRouter({mode: "history"});
 

@@ -3,6 +3,7 @@ let VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 module.exports = {
     mode: "development",
+    devtool: "inline-source-map",
     entry: "./index.js",
     output: {
         path: path.resolve(__dirname, "."),
@@ -25,6 +26,11 @@ module.exports = {
                 test: /\.(png|jpg|gif|svg)$/,
                 loader: "ignore-loader"
             },
+            {
+                test: /\.js$/,
+                loader: "source-map-loader",
+                enforce: "pre"
+            }
         ]
     },
     resolve: {
