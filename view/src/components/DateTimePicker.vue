@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    let Datepicker = require("vuejs-datepicker");
+    let Datepicker = require("vuejs-datepicker").default;
     let VueTimepicker = require("vuejs-timepicker");
 
     module.exports = {

@@ -2,29 +2,30 @@ require ("./index.css");
 let L = require("leaflet");
 let LContextMenu = require("leaflet-contextmenu");
 let Vue = require("vue");
-let Hello = require("./components/Hello.vue");
-let StopPopup = require("./components/StopPopup.vue");
-let XYPopup = require("./components/XYPopup.vue");
-let DateTimePicker = require("./components/DateTimePicker.vue");
-let TimeFilter = require("./components/TimeFilter.vue");
-let StopSearch = require("./components/StopSearch.vue");
-let Datepicker = require("vuejs-datepicker");
+let Hello = require("./components/Hello.vue").default;
+let StopPopup = require("./components/StopPopup.vue").default;
+let XYPopup = require("./components/XYPopup.vue").default;
+let DateTimePicker = require("./components/DateTimePicker.vue").default;
+let TimeFilter = require("./components/TimeFilter.vue").default;
+let StopSearch = require("./components/StopSearch.vue").default;
+let Datepicker = require("vuejs-datepicker").default;
 let VueTimepicker = require("vuejs-timepicker");
 let PulseLoader = require("vue-spinner/dist/vue-spinner.min").PulseLoader;
-let VueRouter = require("vue-router");
-let Autocomplete = require("./node_modules/vue-single-select/dist/VueSingleSelect.vue");
+let VueRouter = require("vue-router").default;
+//let Autocomplete = require("./node_modules/vue-single-select/dist/VueSingleSelect.vue");
+let Autocomplete = require("vue-single-select").default;
 let getty = require("./getty");
 
 const router = new VueRouter({mode: "history"});
 
 window.Vue = Vue;
-Vue.use(require('vue-async-computed'));
+Vue.use(require("vue-async-computed").default);
 Vue.use(VueRouter);
 
 let app = new Vue({
-    el: '#app',
+    el: "#app",
     router,
-    components: {Hello, StopPopup, XYPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker, Autocomplete},
+    components: {StopPopup, XYPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker, Autocomplete},
     data: {
         minDate: new Date(0),
         maxDate: null,

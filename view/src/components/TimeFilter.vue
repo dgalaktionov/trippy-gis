@@ -8,9 +8,9 @@
 </template>
 
 <script>
-    let DateTimePicker = require("./DateTimePicker.vue");
+    let DateTimePicker = require("./DateTimePicker.vue").default;
 
-    export default {
+    module.exports = {
         name: "TimeFilter",
         components: {DateTimePicker},
         props: {

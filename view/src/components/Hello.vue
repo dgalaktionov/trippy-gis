@@ -1,10 +1,10 @@
 <template>
-    <p>{{message}}</p>
+    <p id="hello-vue">{{message}}</p>
 </template>
 
 <script>
     module.exports = {
-        name: "hello",
+        name: "Hello",
         data: function() {
             return {
                 message: "Hello Vue!"

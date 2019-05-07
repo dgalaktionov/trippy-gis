@@ -14,36 +14,17 @@
     "vuejs-timepicker": "git+https://github.com/dgalaktionov/vuejs-timepicker.git"
   },
   "scripts": {
-    "build": "browserify index.js > ../bundle.js"
-  },
-  "browserify": {
-    "transform": [
-      [
-        "browserify-css",
-        {
-          "rebaseUrls": "0"
-        }
-      ],
-      [
-        "babelify",
-        {
-          "presets": [
-            "@babel/preset-env"
-          ]
-        }
-      ],
-      "vueify"
-    ]
-  },
-  "browser": {
-    "vue": "vue/dist/vue.common.js"
+    "build": "webpack --config webpack.config.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
-    "babelify": "^10.0.0",
-    "browserify": "^16.2.3",
-    "browserify-css": "^0.14.0",
-    "vueify": "^9.4.1"
+    "css-loader": "^2.1.1",
+    "file-loader": "^3.0.1",
+    "ignore-loader": "^0.1.2",
+    "style-loader": "^0.23.1",
+    "url-loader": "^1.1.2",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.2"
   }
 }
