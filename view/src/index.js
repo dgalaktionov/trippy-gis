@@ -75,6 +75,13 @@ let app = new Vue({
                     marker.openPopup();
                 }
             }
+        },
+        secondsFromMinDate(d) {
+            if (this.minDate) {
+                return (d.getTime() - this.minDate.getTime())/1000;
+            } else {
+                return -1;
+            }
         }
     }
 });

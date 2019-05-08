@@ -30,15 +30,6 @@
                 isLoading: true,
             }
         },
-        methods: {
-            secondsFromMinDate(d) {
-                if (this.$root.minDate) {
-                    return (d.getTime() - this.$root.minDate.getTime())/1000;
-                } else {
-                    return -1;
-                }
-            }
-        },
         asyncComputed: {
             stats: {
                 get () {
@@ -57,8 +48,8 @@
 
                     return getty.getXY(this.stopX.id,
                         this.stopY.id,
-                        this.secondsFromMinDate(startDate),
-                        this.secondsFromMinDate(endDate)).then(x => {
+                        this.$root.secondsFromMinDate(startDate),
+                        this.$root.secondsFromMinDate(endDate)).then(x => {
                         this.isLoading = false;
                         return x;
                     });
