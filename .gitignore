@@ -45,4 +45,6 @@ data/*
 /view/src/node_modules/
 /view/bundle.js
 !/data/stops.txt
+!/data/*.sql
 /.idea/workspace.xml
+view/src/npm-debug.log

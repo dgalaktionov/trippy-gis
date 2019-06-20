@@ -25,7 +25,7 @@ CREATE TABLE line_stop
 	line_id varchar references line (id),
 	stop_ctr_id integer references stop (ctr_id),
 	seq     integer,
-	primary key (line_id, stop_ctr_id)
+	primary key (line_id, stop_ctr_id, seq)
 );
 
 
