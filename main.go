@@ -8,8 +8,7 @@ import (
 	"time"
 )
 
-var stops = map[string]Stop{}
-var stop_id_to_ctr = map[string]uint32{}
+var stops = map[uint32]Stop{}
 var start_time = time.Now()
 var end_time = time.Now()
 
@@ -18,15 +17,10 @@ func main() {
 	flag.Var(&gtfsFlags, "gtfs", "path to GTFS")
 	flag.Parse()
 
-	if len(gtfsFlags) > 0 {
-		InitDB(gtfsFlags)
-	}
-
 	db := connectDB()
 	defer db.Close()
-	readStops(db)
-	ReadStopId()
-	ReadTime()
+	ReadStops(db)
+	ReadTime(db)
 	CTRLoad()
 	defer CTRFree()
 	router := gin.Default()
@@ -51,13 +45,4 @@ func connectDB() *sqlx.DB {
 	db, err := sqlx.Connect("sqlite3", "file:data/trippy.db?cache=shared&mode=ro")
 	LogAndQuit(err)
 	return db
-}
-
-func readStops(db *sqlx.DB) {
-	stopSlice := []Stop{}
-	err := db.Select(&stopSlice, "SELECT stop_id, stop_name, stop_lat, stop_lon FROM gtfs_stops ORDER BY stop_id")
-	LogAndQuit(err)
-	for _, s := range stopSlice {
-		stops[s.Id] = s
-	}
 }

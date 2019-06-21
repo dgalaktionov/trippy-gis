@@ -49,8 +49,8 @@ func GetAllStops(c *gin.Context) {
 }
 
 func GetStop(c *gin.Context) {
-	idStr := c.Param("id")
-	s := stops[idStr].ToGeoJSON()
+	id := Atoi32(c.Param("id"), c)
+	s := stops[id].ToGeoJSON()
 
 	if s == nil {
 		c.JSON(404, gin.H{
