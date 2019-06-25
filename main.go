@@ -9,6 +9,7 @@ import (
 )
 
 var stops = map[uint32]Stop{}
+var lines = map[string]Line{}
 var start_time = time.Now()
 var end_time = time.Now()
 
@@ -19,9 +20,11 @@ func main() {
 
 	db := connectDB()
 	defer db.Close()
+	// db.LogMode(true)
 	db.SingularTable(true)
-	db.AutoMigrate(&Stop{}, &Journey{})
+	db.AutoMigrate(&Stop{}, &Line{}, &Journey{})
 	ReadStops(db)
+	ReadLines(db)
 	ReadTime(db)
 	CTRLoad()
 	defer CTRFree()
@@ -35,6 +38,8 @@ func main() {
 	router.GET("/time", TimeRange)
 	router.GET("/stops", GetAllStops)
 	router.GET("/stops/:id", GetStop)
+	router.GET("/lines", GetAllLines)
+	router.GET("/lines/:id", GetLine)
 	router.GET("/index", ShowIndex)
 	router.GET("/", ShowIndex)
 	router.GET("/stop_stats/:id", GetStopStats)

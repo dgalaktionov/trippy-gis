@@ -14,6 +14,16 @@ func ReadStops(db *gorm.DB) {
 	}
 }
 
+func ReadLines(db *gorm.DB) {
+	lineSlice := []Line{}
+	db.Find(&lineSlice)
+
+	for _, l := range lineSlice {
+		db.Model(l).Order("seq").Association("Stops").Find(&l.Stops)
+		lines[l.ID] = l
+	}
+}
+
 func ReadTime(db *gorm.DB) {
 	// this toy ORM can't return min(date) without breaking...
 	var journey Journey

@@ -61,6 +61,31 @@ func GetStop(c *gin.Context) {
 	}
 }
 
+func GetAllLines(c *gin.Context) {
+	fc := geojson.NewFeatureCollection()
+
+	for _, l := range lines {
+		if f := l.ToGeoJSON(); f != nil {
+			fc.AddFeature(f)
+		}
+	}
+
+	returnGeoJSONFeatureCollection(c, fc)
+}
+
+func GetLine(c *gin.Context) {
+	id := c.Param("id")
+	s := lines[id].ToGeoJSON()
+
+	if s == nil {
+		c.JSON(404, gin.H{
+			"message": "Line not found",
+		})
+	} else {
+		returnGeoJSONFeature(c, s)
+	}
+}
+
 func ShowIndex(c *gin.Context) {
 	c.HTML(200, "index.html", gin.H{})
 }
