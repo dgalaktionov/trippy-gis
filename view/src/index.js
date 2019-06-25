@@ -138,6 +138,10 @@ let stopLayer = L.geoJSON(null, {
     }
 }).addTo(map);
 
+let lineLayer = L.geoJSON(null, {
+    // TODO
+}).addTo(map);
+
 map.on("contextmenu.show", (e) => {
     if (e.sourceTarget && e.sourceTarget.setStyle) {
         app.contextStop = e.sourceTarget.feature;
@@ -166,6 +170,9 @@ getty.jsonGet("/stops").then(function (fc) {
     });
 });
 
+getty.jsonGet("/lines").then(function (fc) {
+    //lineLayer.addData(fc);
+});
 
 getty.jsonGet("/time").then(function (timeRange) {
     app.minDate = new Date(timeRange.start);
