@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"github.com/gin-gonic/gin"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"time"
 )
 
@@ -19,6 +19,8 @@ func main() {
 
 	db := connectDB()
 	defer db.Close()
+	db.SingularTable(true)
+	db.AutoMigrate(&Stop{}, &Journey{})
 	ReadStops(db)
 	ReadTime(db)
 	CTRLoad()
@@ -37,12 +39,12 @@ func main() {
 	router.GET("/", ShowIndex)
 	router.GET("/stop_stats/:id", GetStopStats)
 	router.GET("/xy", GetXY)
-	err := router.Run()
+	err := router.Run(":8088")
 	LogAndQuit(err)
 }
 
-func connectDB() *sqlx.DB {
-	db, err := sqlx.Connect("sqlite3", "file:data/trippy.db?cache=shared&mode=ro")
+func connectDB() *gorm.DB {
+	db, err := gorm.Open("sqlite3", "file:data/trippy.db?cache=shared&mode=ro")
 	LogAndQuit(err)
 	return db
 }

@@ -1,36 +1,27 @@
 package main
 
 import (
-	"github.com/jmoiron/sqlx"
-	_ "github.com/mattn/go-sqlite3"
-	"time"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-func ReadStops(db *sqlx.DB) {
+func ReadStops(db *gorm.DB) {
 	stopSlice := []Stop{}
-	err := db.Select(&stopSlice, "SELECT ctr_id, name, lat, lon FROM stop WHERE ctr_id IS NOT NULL ORDER BY ctr_id")
-	LogAndQuit(err)
+	db.Find(&stopSlice)
+
 	for _, s := range stopSlice {
-		stops[s.Id] = s
+		stops[s.ID] = s
 	}
 }
 
+func ReadTime(db *gorm.DB) {
+	// this toy ORM can't return min(date) without breaking...
+	var journey Journey
 
-func ReadTime(db *sqlx.DB) {
-	var strTime string
+	db.Order("start_date").Limit(1).Find(&journey)
+	start_time = journey.StartDate
 
-	err := db.Get(&strTime, "SELECT min(start_date) FROM journey")
-	LogAndQuit(err)
-	println(strTime)
-	start_time, err = time.Parse(time.RFC3339[0:19], strTime)
-	LogAndQuit(err)
-	println(start_time.Format("2006-01-02"))
-
-	err = db.Get(&strTime, "SELECT max(start_date) FROM journey")
-	LogAndQuit(err)
-	println(strTime)
-	end_time, err = time.Parse(time.RFC3339[0:19], strTime)
-	LogAndQuit(err)
-	println(end_time.Format("2006-01-02"))
+	journey = Journey{}
+	db.Order("start_date desc").Limit(1).Find(&journey)
+	end_time = journey.StartDate
 }
-
