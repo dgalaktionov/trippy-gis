@@ -139,7 +139,9 @@ let stopLayer = L.geoJSON(null, {
 }).addTo(map);
 
 let lineLayer = L.geoJSON(null, {
-    // TODO
+    style: function (feature) {
+        return {color: "#"+((1<<24)*Math.random()|0).toString(16)}
+    }
 }).addTo(map);
 
 map.on("contextmenu.show", (e) => {
@@ -171,7 +173,7 @@ getty.jsonGet("/stops").then(function (fc) {
 });
 
 getty.jsonGet("/lines").then(function (fc) {
-    //lineLayer.addData(fc);
+    lineLayer.addData(fc);
 });
 
 getty.jsonGet("/time").then(function (timeRange) {
