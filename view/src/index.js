@@ -92,8 +92,16 @@ let map = L.map('map', {
 }).setView([40.42, -3.70], 13);
 let canvasRenderer = L.canvas({ padding: 0.2 });
 
+/*
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+ */
+
+L.tileLayer('https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey={apikey}', {
+    attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    apikey: process.env.THUNDERFOREST_KEY,
+    maxZoom: 22
 }).addTo(map);
 
 let stopLayer = L.geoJSON(null, {
