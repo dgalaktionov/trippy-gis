@@ -14,9 +14,10 @@ type Stop struct {
 }
 
 type Line struct {
-	ID    string
-	Name  string
-	Stops []Stop `gorm:"many2many:line_stop;association_foreignkey:ctr_id;jointable_foreignkey:line_id;association_jointable_foreignkey:stop_ctr_id;"`
+	ID        string
+	ShortName string
+	LongName  string
+	Stops     []Stop `gorm:"many2many:line_stop;association_foreignkey:ctr_id;jointable_foreignkey:line_id;association_jointable_foreignkey:stop_ctr_id;"`
 }
 
 type Journey struct {
@@ -48,7 +49,8 @@ func (l Line) ToGeoJSON() *geojson.Feature {
 
 	f := geojson.NewLineStringFeature(coords)
 	f.Properties["id"] = l.ID
-	f.Properties["name"] = l.Name
+	f.Properties["short_name"] = l.ShortName
+	f.Properties["long_name"] = l.LongName
 	f.Properties["stops"] = stopIds
 	return f
 }

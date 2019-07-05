@@ -15,7 +15,8 @@ DROP TABLE IF EXISTS line;
 CREATE TABLE line
 (
 	id   varchar primary key,
-	name varchar
+	short_name varchar,
+	long_name varchar
 );
 
 
