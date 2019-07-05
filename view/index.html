@@ -11,9 +11,16 @@
         </div>
 
         <div class="trippy-map-filters">
-            <stop-search v-model="startStop" v-bind:stops="stops" v-on:input="selectStop" placeholder="Find starting stop"></stop-search>
-            <stop-search v-model="endStop" v-bind:stops="stops" v-on:input="(s) => selectStop(s, true)" placeholder="Find ending stop"></stop-search>
-            <time-filter v-model="selectedDate" v-bind:min-date="minDate" v-bind:max-date="maxDate"></time-filter>
+            <div class="filter-column">
+                <stop-search v-model="startStop" v-bind:stops="startStops" v-on:input="selectStop" placeholder="Find starting stop"></stop-search>
+                <stop-search v-model="endStop" v-bind:stops="startStops" v-on:input="(s) => selectStop(s, true)" placeholder="Find ending stop"></stop-search>
+                <time-filter v-model="selectedDate" v-bind:min-date="minDate" v-bind:max-date="maxDate"></time-filter>
+            </div>
+
+            <div class="filter-column">
+                <line-filter v-model="startLine" v-bind:lines="startLines" v-on:input="selectLine"></line-filter>
+                <line-filter v-model="endLine" v-bind:lines="endLines" v-on:input="(l) => selectLine(l, true)"></line-filter>
+            </div>
         </div>
 
         <stop-popup ref="hiddenStopPopup" v-bind:stop="selectedStop"></stop-popup>

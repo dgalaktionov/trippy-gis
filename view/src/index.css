@@ -19,3 +19,8 @@ html,body, #app {
     margin-top: 1rem;
 }
 
+.filter-column {
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+}

@@ -8,6 +8,7 @@ import XYPopup from "./components/XYPopup.vue";
 import DateTimePicker from "./components/DateTimePicker.vue";
 import TimeFilter from "./components/TimeFilter.vue";
 import StopSearch from "./components/StopSearch.vue";
+import LineFilter from "./components/LineFilter.vue";
 import Datepicker from "vuejs-datepicker";
 import VueTimepicker from "vuejs-timepicker";
 import { PulseLoader } from "vue-spinner/dist/vue-spinner";
@@ -24,7 +25,7 @@ Vue.use(VueRouter);
 let app = new Vue({
     el: "#app",
     router,
-    components: {StopPopup, XYPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker, Autocomplete},
+    components: {LineFilter, StopPopup, XYPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker, Autocomplete},
     data: {
         minDate: new Date(0),
         maxDate: null,
@@ -35,11 +36,18 @@ let app = new Vue({
         selectedStop: {id: 0, name: ""},
         startStop: null,
         endStop: null,
+        startLine: null,
+        endLine: null,
         xyStops: {
             start: null,
             end: null
         },
         stops: [],
+        lines: [],
+        startStops: [],
+        endStops: [],
+        startLines: [],
+        endLines: [],
         stopMarkers: {},
         contextStop: null
     },
@@ -73,6 +81,22 @@ let app = new Vue({
                 if (marker && marker._map) {
                     marker._map.setView(marker.getLatLng());
                     marker.openPopup();
+                }
+            }
+        },
+        selectLine(l, isEndLine) {
+            if (isEndLine) {
+                if (!l) {
+                    this.endStops = this.stops;
+                } else {
+                    this.endStops = this.stops.filter(s => l.stops.indexOf(s.id) > -1);
+                }
+
+            } else {
+                if (!l) {
+                    this.startStops = this.stops;
+                } else {
+                    this.startStops = this.stops.filter(s => l.stops.indexOf(s.id) > -1);
                 }
             }
         },
@@ -169,6 +193,8 @@ map.on("contextmenu.hide", (e) => {
 getty.jsonGet("/stops").then(function (fc) {
     stopLayer.addData(fc);
     app.stops = fc.features.map(f => f.properties);
+    app.startStops = app.stops;
+    app.endStops = app.stops;
     app.stops.sort((f1,f2) => {
         if (f1.name < f2.name) {
             return -1;
@@ -182,6 +208,9 @@ getty.jsonGet("/stops").then(function (fc) {
 
 getty.jsonGet("/lines").then(function (fc) {
     lineLayer.addData(fc);
+    app.lines = fc.features.map(f => f.properties);
+    app.startLines = app.lines;
+    app.endLines = app.lines;
 });
 
 getty.jsonGet("/time").then(function (timeRange) {
