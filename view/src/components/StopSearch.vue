@@ -40,7 +40,6 @@
 
         methods: {
             getDescription(option) {
-                //return option.name + " (" + option.lines.map(l => l.short_name).join() + ")";
                 return `${option.name} (${option.lines.map(l => l.short_name).join()})`
             }
         }
