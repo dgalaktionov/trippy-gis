@@ -1,6 +1,7 @@
 <template>
     <div class="trippy-search-field">
-        <autocomplete v-model="selectedStop" :options="stops" option-key="id" option-label="name" :placeholder="placeholder"></autocomplete>
+        <autocomplete v-model="selectedStop" :options="stops" option-key="id"
+                      option-label="name" :placeholder="placeholder" :get-option-description="getDescription"></autocomplete>
     </div>
 </template>
 
@@ -34,6 +35,13 @@
                 set(s) {
                     this.$emit("input", s);
                 }
+            }
+        },
+
+        methods: {
+            getDescription(option) {
+                //return option.name + " (" + option.lines.map(l => l.short_name).join() + ")";
+                return `${option.name} (${option.lines.map(l => l.short_name).join()})`
             }
         }
     }

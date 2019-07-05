@@ -42,8 +42,8 @@ let app = new Vue({
             start: null,
             end: null
         },
-        stops: [],
-        lines: [],
+        stops: {},
+        lines: {},
         startStops: [],
         endStops: [],
         startLines: [],
@@ -87,16 +87,16 @@ let app = new Vue({
         selectLine(l, isEndLine) {
             if (isEndLine) {
                 if (!l) {
-                    this.endStops = this.stops;
+                    this.endStops = Object.values(this.stops);
                 } else {
-                    this.endStops = this.stops.filter(s => l.stops.indexOf(s.id) > -1);
+                    this.endStops = l.stops.map(sid => app.stops[sid]);
                 }
 
             } else {
                 if (!l) {
-                    this.startStops = this.stops;
+                    this.startStops = Object.values(this.stops);
                 } else {
-                    this.startStops = this.stops.filter(s => l.stops.indexOf(s.id) > -1);
+                    this.startStops = l.stops.map(sid => app.stops[sid]);
                 }
             }
         },
@@ -190,11 +190,24 @@ map.on("contextmenu.hide", (e) => {
     }
 });
 
+
+var stopsResolver = null;
+let stopsPromise = new Promise(function(resolve, reject) {
+    stopsResolver = resolve;
+});
+
+var linesResolver = null;
+let linesPromise = new Promise(function(resolve, reject) {
+    linesResolver = resolve;
+});
+
 getty.jsonGet("/stops").then(function (fc) {
     stopLayer.addData(fc);
-    app.stops = fc.features.map(f => f.properties);
-    app.startStops = app.stops;
-    app.endStops = app.stops;
+    fc.features.map(f => f.properties).forEach(s => app.stops[s.id] = s);
+    app.startStops = Object.values(app.stops);
+    app.endStops = Object.values(app.stops);
+
+    /*
     app.stops.sort((f1,f2) => {
         if (f1.name < f2.name) {
             return -1;
@@ -204,13 +217,18 @@ getty.jsonGet("/stops").then(function (fc) {
             return 0;
         }
     });
+     */
+
+    stopsResolver();
 });
 
 getty.jsonGet("/lines").then(function (fc) {
     lineLayer.addData(fc);
-    app.lines = fc.features.map(f => f.properties);
-    app.startLines = app.lines;
-    app.endLines = app.lines;
+    fc.features.map(f => f.properties).forEach(l => app.lines[l.id] = l);
+    app.startLines = Object.values(app.lines);
+    app.endLines = Object.values(app.lines);
+
+    linesResolver();
 });
 
 getty.jsonGet("/time").then(function (timeRange) {
@@ -218,6 +236,11 @@ getty.jsonGet("/time").then(function (timeRange) {
     let maxDate = new Date(timeRange.end);
     maxDate.setHours(23,59,59);
     app.maxDate = maxDate;
+});
+
+Promise.all([stopsPromise, linesPromise]).then(function() {
+    Object.values(app.stops).forEach(s => s.lines = []);
+    Object.values(app.lines).forEach(l => l.stops.forEach(sid => app.stops[sid].lines.push(l)));
 });
 
 window.app = app;
