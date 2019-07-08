@@ -1,6 +1,10 @@
 <template>
     <div class="trippy-search-field">
-        <autocomplete v-model="selectedLine" :options="lines" option-key="id" option-label="long_name" :placeholder="placeholder"></autocomplete>
+        <autocomplete v-model="selectedLine" :options="lines" option-key="id" option-label="long_name" :placeholder="placeholder">
+            <template v-slot:option="data">
+                <b>{{data.option.short_name}}</b> {{data.option.long_name}}
+            </template>
+        </autocomplete>
     </div>
 </template>
 
