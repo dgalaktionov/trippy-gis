@@ -1,6 +1,8 @@
 <template>
     <div class="stop-popup" v-if="stop && stop.name">
-        <div class="stop-popup-title">{{stop.name}}</div>
+        <div class="stop-popup-title">
+            {{stop.name}} ({{stop.lines.map(l => l.short_name).join(", ")}})
+        </div>
         <pulse-loader :loading="isLoading" color="#102938" size="12px"></pulse-loader>
         <div class="stop-popup-stats" v-show="!isLoading">
             <div class="stop-popup-counter">Board: {{stats.board}}</div>

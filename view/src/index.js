@@ -223,7 +223,7 @@ getty.jsonGet("/stops").then(function (fc) {
 });
 
 getty.jsonGet("/lines").then(function (fc) {
-    lineLayer.addData(fc);
+    //lineLayer.addData(fc);
     fc.features.map(f => f.properties).forEach(l => app.lines[l.id] = l);
     app.startLines = Object.values(app.lines);
     app.endLines = Object.values(app.lines);
