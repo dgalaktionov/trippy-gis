@@ -1,6 +1,7 @@
 import "./index.css";
 import L from "leaflet";
 import LContextMenu from "leaflet-contextmenu";
+import RectSelect from "./Map.RectSelect";
 import Vue from "vue";
 import Hello from "./components/Hello.vue";
 import StopPopup from "./components/StopPopup.vue";
@@ -110,10 +111,31 @@ let app = new Vue({
     }
 });
 
+function applySelectedMarkerStyle(marker) {
+    marker.setStyle({color: "#f00"});
+}
+
+function applyDefaultMarkerStyle(marker) {
+    marker.setStyle({color: "#3388ff"});
+}
+
+function filterStops(bounds) {
+    Object.values(app.stopMarkers).forEach(marker =>  {
+        if (bounds.contains(marker._latlng)) {
+            applySelectedMarkerStyle(marker);
+        }
+    });
+}
+
 let map = L.map('map', {
     preferCanvas: true,
     contextmenu: true,
-}).setView([40.42, -3.70], 13);
+    boxZoom: false,
+}).setView([40.42, -3.70], 13)
+    .on("boxzoomend", function(e) {
+        console.log(e);
+        filterStops(e.boxZoomBounds);
+    });
 let canvasRenderer = L.canvas({ padding: 0.2 });
 
 /*
@@ -131,12 +153,12 @@ L.tileLayer('https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey
 let stopLayer = L.geoJSON(null, {
     onEachFeature: function(feature, layer) {
         layer.bindPopup(() => {
-            layer.setStyle({color: "#f00"});
+            applySelectedMarkerStyle(layer);
             app.selectedStop = feature.properties;
             return app.$refs.hiddenStopPopup.$el;
         }, {
             maxWidth: "auto"
-        }).on("popupclose", () => layer.setStyle({color: "#3388ff"}));
+        }).on("popupclose", () => applyDefaultMarkerStyle(layer));
     },
     pointToLayer: function(feature, coords) {
         app.stopMarkers[feature.properties.id] = L.circleMarker(coords, {
@@ -179,13 +201,13 @@ let lineLayer = L.geoJSON(null, {
 map.on("contextmenu.show", (e) => {
     if (e.sourceTarget && e.sourceTarget.setStyle) {
         app.contextStop = e.sourceTarget.feature;
-        e.sourceTarget.setStyle({color: "#f00"})
+        applySelectedMarkerStyle(e.sourceTarget);
     }
 });
 
 map.on("contextmenu.hide", (e) => {
     if (app.contextStop) {
-        app.stopMarkers[app.contextStop.properties.id].setStyle({color: "#3388ff"});
+        applyDefaultMarkerStyle(app.stopMarkers[app.contextStop.properties.id]);
         //app.contextStop = null;
     }
 });
