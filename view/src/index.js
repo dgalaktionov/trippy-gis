@@ -35,6 +35,7 @@ let app = new Vue({
             endDate: null,
         },
         selectedStop: {id: 0, name: ""},
+        selectedStops: [],
         startStop: null,
         endStop: null,
         startLine: null,
@@ -56,6 +57,10 @@ let app = new Vue({
         selectStop(s, isEndStop) {
             if (!s) {
                 return;
+            }
+
+            if (this.selectedStops.length > 0) {
+                this.clearSelectedStops();
             }
 
             if (isEndStop) {
@@ -107,6 +112,32 @@ let app = new Vue({
             } else {
                 return -1;
             }
+        },
+
+        selectStops(bounds) {
+            let selectedIds = [];
+
+            Object.keys(this.stopMarkers).forEach(sid =>  {
+                let marker = this.stopMarkers[sid];
+
+                if (bounds.contains(marker._latlng)) {
+                    applySelectedMarkerStyle(marker);
+                    selectedIds.push(sid);
+                }
+            });
+
+            if (selectedIds.length > 0) {
+                if (this.selectedStops.length > 0) {
+                    console.log("query! " + this.selectedStops + selectedIds);
+                } else {
+                    this.selectedStops = selectedIds;
+                }
+            }
+        },
+
+        clearSelectedStops() {
+            Object.values(this.stopMarkers).forEach(applyDefaultMarkerStyle);
+            this.selectedStops = [];
         }
     }
 });
@@ -119,22 +150,13 @@ function applyDefaultMarkerStyle(marker) {
     marker.setStyle({color: "#3388ff"});
 }
 
-function filterStops(bounds) {
-    Object.values(app.stopMarkers).forEach(marker =>  {
-        if (bounds.contains(marker._latlng)) {
-            applySelectedMarkerStyle(marker);
-        }
-    });
-}
-
 let map = L.map('map', {
     preferCanvas: true,
     contextmenu: true,
     boxZoom: false,
 }).setView([40.42, -3.70], 13)
     .on("boxzoomend", function(e) {
-        console.log(e);
-        filterStops(e.boxZoomBounds);
+        app.selectStops(e.boxZoomBounds);
     });
 let canvasRenderer = L.canvas({ padding: 0.2 });
 
@@ -153,6 +175,10 @@ L.tileLayer('https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey
 let stopLayer = L.geoJSON(null, {
     onEachFeature: function(feature, layer) {
         layer.bindPopup(() => {
+            if (app.selectedStops.length > 0) {
+                app.clearSelectedStops();
+            }
+
             applySelectedMarkerStyle(layer);
             app.selectedStop = feature.properties;
             return app.$refs.hiddenStopPopup.$el;
