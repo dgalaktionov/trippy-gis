@@ -1,6 +1,7 @@
 import "./index.css";
 import L from "leaflet";
 import LContextMenu from "leaflet-contextmenu";
+import LPolylineDecorator from "leaflet-polylinedecorator";
 import RectSelect from "./Map.RectSelect";
 import Vue from "vue";
 import Hello from "./components/Hello.vue";
@@ -36,6 +37,8 @@ let app = new Vue({
         },
         selectedStop: {id: 0, name: ""},
         selectedStops: [],
+        selectedBounds: null,
+        arrow: null,
         startStop: null,
         endStop: null,
         startLine: null,
@@ -114,6 +117,18 @@ let app = new Vue({
             }
         },
 
+        makeArrow(origin, dest) {
+            let arrow = L.polyline([origin, dest], {color: "red", renderer: canvasRenderer}).addTo(map);
+            let arrowDecorator = L.polylineDecorator(arrow, {
+                patterns: [
+                    {offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false,
+                            pathOptions: {color: "red", stroke: true, renderer: canvasRenderer}})}
+                ]
+            }).addTo(map);
+
+            return [arrow, arrowDecorator];
+        },
+
         selectStops(bounds) {
             let selectedIds = [];
 
@@ -128,9 +143,25 @@ let app = new Vue({
 
             if (selectedIds.length > 0) {
                 if (this.selectedStops.length > 0) {
+                    let [arrow, arrowDecorator] = this.makeArrow(this.selectedBounds.getCenter(), bounds.getCenter());
+
+                    arrow.bindPopup(() => {
+                        return "Tomorrow I'll display some stats here :D";
+                    }, { maxWidth: "auto" });
+
+                    setTimeout(() => arrow.openPopup(), 500);
+
+                    arrow.on("popupclose", () => {
+                        console.log("wtf closed");
+                        arrow.removeFrom(map);
+                        arrowDecorator.removeFrom(map);
+                        this.clearSelectedStops();
+                    });
+
                     console.log("query! " + this.selectedStops + selectedIds);
                 } else {
                     this.selectedStops = selectedIds;
+                    this.selectedBounds = bounds;
                 }
             }
         },
