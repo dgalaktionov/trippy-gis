@@ -73,17 +73,19 @@ let app = new Vue({
             }
 
             if (this.startStop && this.endStop) {
-                let x = this.stopMarkers[this.startStop.id].getLatLng();
-                let y = this.stopMarkers[this.endStop.id].getLatLng();
+                let originMarker = this.stopMarkers[this.startStop.id];
+                let destMarker = this.stopMarkers[this.endStop.id];
 
-                let line = L.polyline([x,y], {
-                    color: "red",
-                    weight: 3,
-                    renderer: canvasRenderer,
-                }).addTo(map).bindPopup(() => {
+                let [arrow, arrowDecorator] = this.makeArrow(originMarker.getLatLng(), destMarker.getLatLng());
+
+                arrow.bindPopup(() => {
                     return app.$refs.hiddenXYPopup.$el;
-                }, {maxWidth: "auto"}).openPopup();
-                line.on("popupclose", () => line.removeFrom(map));
+                }, { maxWidth: "auto" });
+
+                //setTimeout(() => arrow.openPopup(), 500);
+                arrow.openPopup();
+                applySelectedMarkerStyle(originMarker);
+                applySelectedMarkerStyle(destMarker);
             } else {
                 let marker = this.stopMarkers[s.id];
 
@@ -118,13 +120,19 @@ let app = new Vue({
         },
 
         makeArrow(origin, dest) {
-            let arrow = L.polyline([origin, dest], {color: "red", renderer: canvasRenderer}).addTo(map);
+            let arrow = L.polyline([origin, dest], {color: "red", weight: 3, renderer: canvasRenderer}).addTo(map);
             let arrowDecorator = L.polylineDecorator(arrow, {
                 patterns: [
                     {offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false,
-                            pathOptions: {color: "red", stroke: true, renderer: canvasRenderer}})}
+                            pathOptions: {color: "red", weight: 3, stroke: true, renderer: canvasRenderer}})}
                 ]
             }).addTo(map);
+
+            arrow.on("popupclose", () => {
+                arrow.removeFrom(map);
+                arrowDecorator.removeFrom(map);
+                this.clearSelectedStops();
+            });
 
             return [arrow, arrowDecorator];
         },
@@ -150,13 +158,6 @@ let app = new Vue({
                     }, { maxWidth: "auto" });
 
                     setTimeout(() => arrow.openPopup(), 500);
-
-                    arrow.on("popupclose", () => {
-                        console.log("wtf closed");
-                        arrow.removeFrom(map);
-                        arrowDecorator.removeFrom(map);
-                        this.clearSelectedStops();
-                    });
 
                     console.log("query! " + this.selectedStops + selectedIds);
                 } else {
