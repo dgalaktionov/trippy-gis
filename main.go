@@ -44,6 +44,7 @@ func main() {
 	router.GET("/", ShowIndex)
 	router.GET("/stop_stats/:id", GetStopStats)
 	router.GET("/xy", GetXY)
+	router.POST("/xy_area", GetXYArea)
 	err := router.Run(":8088")
 	LogAndQuit(err)
 }

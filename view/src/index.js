@@ -7,6 +7,7 @@ import Vue from "vue";
 import Hello from "./components/Hello.vue";
 import StopPopup from "./components/StopPopup.vue";
 import XYPopup from "./components/XYPopup.vue";
+import XYAreaPopup from "./components/XYAreaPopup.vue";
 import DateTimePicker from "./components/DateTimePicker.vue";
 import TimeFilter from "./components/TimeFilter.vue";
 import StopSearch from "./components/StopSearch.vue";
@@ -27,7 +28,8 @@ Vue.use(VueRouter);
 let app = new Vue({
     el: "#app",
     router,
-    components: {LineFilter, StopPopup, XYPopup, DateTimePicker, TimeFilter, StopSearch, Datepicker, PulseLoader, VueTimepicker, Autocomplete},
+    components: {LineFilter, StopPopup, XYPopup, XYAreaPopup, DateTimePicker, TimeFilter, StopSearch,
+        Datepicker, PulseLoader, VueTimepicker, Autocomplete},
     data: {
         minDate: new Date(0),
         maxDate: null,
@@ -145,7 +147,7 @@ let app = new Vue({
 
                 if (bounds.contains(marker._latlng)) {
                     applySelectedMarkerStyle(marker);
-                    selectedIds.push(sid);
+                    selectedIds.push(parseInt(sid, 10));
                 }
             });
 
@@ -154,7 +156,9 @@ let app = new Vue({
                     let [arrow, arrowDecorator] = this.makeArrow(this.selectedBounds.getCenter(), bounds.getCenter());
 
                     arrow.bindPopup(() => {
-                        return "Tomorrow I'll display some stats here :D";
+                        app.$refs.hiddenXYAreaPopup.$props.startStops = this.selectedStops;
+                        app.$refs.hiddenXYAreaPopup.$props.endStops = selectedIds;
+                        return app.$refs.hiddenXYAreaPopup.$el;
                     }, { maxWidth: "auto" });
 
                     setTimeout(() => arrow.openPopup(), 500);
@@ -325,3 +329,7 @@ Promise.all([stopsPromise, linesPromise]).then(function() {
 
 window.app = app;
 window.map = map;
+
+window.testXY = function() {
+    getty.getXYArea().then(console.log);
+};

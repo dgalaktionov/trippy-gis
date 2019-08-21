@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/paulmach/go.geojson"
 	"time"
@@ -117,5 +118,27 @@ func GetXY(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"xy": xy,
+	})
+}
+
+type TimeWindow struct {
+	From int32 `json:"from"`
+	To   int32 `json:"to"`
+}
+
+type XYAreaRequest struct {
+	Time       TimeWindow `json:"time"`
+	StartStops []int32    `json:"start_stops"`
+	EndStops   []int32    `json:"end_stops"`
+}
+
+func GetXYArea(c *gin.Context) {
+	rawRequest, err := c.GetRawData()
+	LogAndPanic2(err, c)
+	var data XYAreaRequest
+	LogAndPanic2(json.Unmarshal(rawRequest, &data), c)
+
+	c.JSON(200, gin.H{
+		"xy": data.StartStops,
 	})
 }

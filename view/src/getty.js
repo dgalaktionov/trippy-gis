@@ -1,7 +1,11 @@
-function simplyGet(url) {
+function simplyGet(url, data=null) {
     return new Promise(function(resolve, reject) {
         let req = new XMLHttpRequest();
-        req.open('GET', url);
+        req.open(data ? 'POST' : 'GET', url);
+
+        if (data) {
+            req.setRequestHeader("Content-Type", "application/json")
+        }
 
         req.onload = function() {
             if (req.status == 200) {
@@ -15,7 +19,7 @@ function simplyGet(url) {
             reject(req);
         };
 
-        req.send();
+        req.send(data ? JSON.stringify(data) : null);
     });
 }
 
@@ -23,8 +27,8 @@ function errorGet(req) {
     console.log("Failed request (" + req.status + "): " + req.response);
 }
 
-function jsonGet(url) {
-    return simplyGet(url).then(function (text) {
+function jsonGet(url, data=null) {
+    return simplyGet(url, data).then(function (text) {
         return text;
     }).catch(errorGet).then(function (text) {
         return JSON.parse(text);
@@ -76,4 +80,25 @@ function getXY(x, y, fromTime, toTime) {
     return jsonGet(url);
 }
 
-module.exports = {simplyGet, jsonGet, getStopStats, getXY};
+function getXYArea(x, y, fromTime, toTime) {
+    var url = "/xy_area";
+    var data = {start_stops: x, end_stops: y};
+    var time = {};
+
+    if (fromTime && fromTime >= 0) {
+        time["from_time"] = fromTime;
+    }
+
+    if (toTime && toTime >= 0) {
+        time["to_time"] = toTime;
+    }
+
+    if (time["from_time"] || time["to_time"]) {
+        data["time"] = time;
+    }
+
+
+    return jsonGet(url, data)
+}
+
+module.exports = {simplyGet, jsonGet, getStopStats, getXY, getXYArea};
