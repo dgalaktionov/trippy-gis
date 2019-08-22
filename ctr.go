@@ -53,3 +53,7 @@ func CTRBoard(s uint32, fromTime uint32, toTime uint32) uint64 {
 func CTRXY(x uint32, y uint32, fromTime uint32, toTime uint32) uint64 {
 	return uint64(C.CTR_xy(ctr, C.uint(x), C.uint(y), C.uint(fromTime), C.uint(toTime)))
 }
+
+func CTRXYArea(x []uint32, y []uint32, fromTime uint32, toTime uint32) uint64 {
+	return uint64(C.CTR_xy_area(ctr, (*C.uint)(&x[0]), C.uint(len(x)), (*C.uint)(&y[0]), C.uint(len(y)), C.uint(fromTime), C.uint(toTime)))
+}

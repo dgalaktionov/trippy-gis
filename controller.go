@@ -122,14 +122,14 @@ func GetXY(c *gin.Context) {
 }
 
 type TimeWindow struct {
-	From int32 `json:"from"`
-	To   int32 `json:"to"`
+	From uint32 `json:"from"`
+	To   uint32 `json:"to"`
 }
 
 type XYAreaRequest struct {
 	Time       TimeWindow `json:"time"`
-	StartStops []int32    `json:"start_stops"`
-	EndStops   []int32    `json:"end_stops"`
+	StartStops []uint32   `json:"start_stops"`
+	EndStops   []uint32   `json:"end_stops"`
 }
 
 func GetXYArea(c *gin.Context) {
@@ -138,7 +138,25 @@ func GetXYArea(c *gin.Context) {
 	var data XYAreaRequest
 	LogAndPanic2(json.Unmarshal(rawRequest, &data), c)
 
-	c.JSON(200, gin.H{
-		"xy": data.StartStops,
-	})
+	if data.StartStops == nil || data.EndStops == nil {
+		c.JSON(400, gin.H{
+			"message": "incomplete query",
+		})
+	} else {
+		fromTime := uint32(0)
+		toTime := uint32(0)
+
+		//if data.Time != nil {
+		fromTime = data.Time.From
+		toTime = data.Time.To
+		//}
+
+		println(fromTime)
+		println(toTime)
+		xy := CTRXYArea(data.StartStops, data.EndStops, fromTime, toTime)
+
+		c.JSON(200, gin.H{
+			"xy": xy,
+		})
+	}
 }

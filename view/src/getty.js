@@ -86,14 +86,14 @@ function getXYArea(x, y, fromTime, toTime) {
     var time = {};
 
     if (fromTime && fromTime >= 0) {
-        time["from_time"] = fromTime;
+        time["from"] = fromTime;
     }
 
     if (toTime && toTime >= 0) {
-        time["to_time"] = toTime;
+        time["to"] = toTime;
     }
 
-    if (time["from_time"] || time["to_time"]) {
+    if (time["from"] || time["to"]) {
         data["time"] = time;
     }
 

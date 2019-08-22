@@ -137,3 +137,27 @@ uint64_t CTR_xy(void * ctr, uint32_t s1, uint32_t s2, uint32_t h_start, uint32_t
     freeQuery(query);
     return result;
 }
+
+
+uint64_t CTR_xy_area(void *ctr, uint32_t *s1, uint32_t n_s1, uint32_t *s2, uint32_t n_s2, uint32_t h_start, uint32_t h_end) {
+    TimeQuery *query = prepareQuery();
+    query->time->h_start = h_start;
+    query->time->h_end = h_end;
+    query->subtype = 0;
+    if (h_end) query->subtype |= XY_TIME_START;
+    // TODO XY_TIME_END
+
+    uint64_t result = 0;
+
+    for (uint32_t i = 0; i < n_s1; i++) {
+        query->values[1] = s1[i];
+
+        for (uint32_t j = 0; j < n_s2; j++) {
+            query->values[3] = s2[j];
+            result += get_from_x_to_y(ctr, query);
+        }
+    }
+
+    freeQuery(query);
+    return result;
+}
