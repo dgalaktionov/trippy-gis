@@ -156,8 +156,8 @@ let app = new Vue({
                     let [arrow, arrowDecorator] = this.makeArrow(this.selectedBounds.getCenter(), bounds.getCenter());
 
                     arrow.bindPopup(() => {
-                        app.$refs.hiddenXYAreaPopup.$props.startStops = this.selectedStops;
-                        app.$refs.hiddenXYAreaPopup.$props.endStops = selectedIds;
+                        app.$refs.hiddenXYAreaPopup.$data.startStops = this.selectedStops;
+                        app.$refs.hiddenXYAreaPopup.$data.endStops = selectedIds;
                         return app.$refs.hiddenXYAreaPopup.$el;
                     }, { maxWidth: "auto" });
 

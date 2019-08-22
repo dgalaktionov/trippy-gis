@@ -15,17 +15,11 @@
     export default {
         name: "XYAreaPopup",
         components: {PulseLoader},
-        props: {
-            startStops: {
-                //required: true
-            },
-            endStops: {
-                //required: true
-            }
-        },
         data() {
             return {
                 isLoading: true,
+                startStops: [],
+                endStops: []
             }
         },
         asyncComputed: {
