@@ -143,16 +143,8 @@ func GetXYArea(c *gin.Context) {
 			"message": "incomplete query",
 		})
 	} else {
-		fromTime := uint32(0)
-		toTime := uint32(0)
-
-		//if data.Time != nil {
-		fromTime = data.Time.From
-		toTime = data.Time.To
-		//}
-
-		println(fromTime)
-		println(toTime)
+		fromTime := data.Time.From
+		toTime := data.Time.To
 		xy := CTRXYArea(data.StartStops, data.EndStops, fromTime, toTime)
 
 		c.JSON(200, gin.H{

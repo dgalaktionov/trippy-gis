@@ -149,11 +149,11 @@ uint64_t CTR_xy_area(void *ctr, uint32_t *s1, uint32_t n_s1, uint32_t *s2, uint3
 
     uint64_t result = 0;
 
-    for (uint32_t i = 0; i < n_s1; i++) {
-        query->values[1] = s1[i];
+    for (uint32_t j = 0; j < n_s2; j++) {
+        query->values[3] = s2[j];
 
-        for (uint32_t j = 0; j < n_s2; j++) {
-            query->values[3] = s2[j];
+        for (uint32_t i = 0; i < n_s1; i++) {
+            query->values[1] = s1[i];
             result += get_from_x_to_y(ctr, query);
         }
     }

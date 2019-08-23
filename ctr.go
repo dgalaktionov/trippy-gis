@@ -4,7 +4,10 @@ package main
 // #cgo LDFLAGS: -Lctr -lwcsa -lsais -lcds -lrt -lzstd
 // #include "cgo.hxx"
 import "C"
-import "unsafe"
+import (
+	"log"
+	"unsafe"
+)
 
 var ctr unsafe.Pointer
 
@@ -55,5 +58,6 @@ func CTRXY(x uint32, y uint32, fromTime uint32, toTime uint32) uint64 {
 }
 
 func CTRXYArea(x []uint32, y []uint32, fromTime uint32, toTime uint32) uint64 {
+	log.Printf("Querying %d x %d area", len(x), len(y))
 	return uint64(C.CTR_xy_area(ctr, (*C.uint)(&x[0]), C.uint(len(x)), (*C.uint)(&y[0]), C.uint(len(y)), C.uint(fromTime), C.uint(toTime)))
 }
