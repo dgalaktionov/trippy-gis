@@ -162,8 +162,6 @@ let app = new Vue({
                     }, { maxWidth: "auto" });
 
                     setTimeout(() => arrow.openPopup(), 500);
-
-                    console.log("query! " + this.selectedStops + selectedIds);
                 } else {
                     this.selectedStops = selectedIds;
                     this.selectedBounds = bounds;
@@ -174,6 +172,7 @@ let app = new Vue({
         clearSelectedStops() {
             Object.values(this.stopMarkers).forEach(applyDefaultMarkerStyle);
             this.selectedStops = [];
+            this.selectedStop = {id: 0, name: ""};
         }
     }
 });
