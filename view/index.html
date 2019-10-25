@@ -23,9 +23,16 @@
             </div>
         </div>
 
+        <img src="images/birds_header.png" alt="Project logo" class="birds-logo" />
+
         <stop-popup ref="hiddenStopPopup" v-bind:stop="selectedStop"></stop-popup>
         <x-y-popup ref="hiddenXYPopup" v-bind:stop-x="startStop" v-bind:stop-y="endStop"></x-y-popup>
         <x-y-area-popup ref="hiddenXYAreaPopup"></x-y-area-popup>
+
+        <div class="trippy-attribution">
+            Funded in part by European Union’s Horizon 2020 research and innovation programme
+            under the Marie Sklodowska-Curie grant agreement No 690941 (project BIRDS).
+        </div>
     </div>
 
     <script src="bundle.js"></script>

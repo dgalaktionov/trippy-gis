@@ -48,3 +48,5 @@ data/*
 !/data/*.sql
 /.idea/workspace.xml
 view/src/npm-debug.log
+/view/src/.env
+/vendor/
