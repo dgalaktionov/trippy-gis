@@ -37,9 +37,14 @@ html,body, #app {
 
 img.birds-logo {
     z-index: 2000;
+
+    /*
     position: absolute !important;
     top: 0;
     right: 0;
+	*/
+
     margin-right: 0.5rem;
     margin-top: 0.5rem;
+   	max-height: 2rem;
 }
